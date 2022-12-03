@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Overfort Games/First Person Controller - Advanced/Scenes/Showcase.unity
+    guid: 216febfb59804d440b3de21d4675064b
   m_configObjects: {}
