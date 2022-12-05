@@ -47,8 +47,6 @@ namespace Jinwoo.FirstPersonController
 		private bool isHookButtonDown;
 		private bool isRunButtonPressedDown;
 		private bool isRunButtonDoublePressedDown;
-		private bool isLeanLeftButtonBeingPressed;
-		private bool isLeanRightButtonBeingPressed;
 		private bool isZoomButtonBeingPressed;
 
 		private float lastTimeRunButtonBeingPressed;
@@ -99,7 +97,7 @@ namespace Jinwoo.FirstPersonController
 
 		private void LateUpdate()
 		{
-			//Reset Up/Down input flags
+			//업다운 인풋 리셋
 			isRunButtonDoublePressedDown = false;
 		}
 

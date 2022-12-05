@@ -387,23 +387,7 @@ namespace Jinwoo.FirstPersonController
             public float cameraTiltResetLerpSpeed = 10;
         }
 
-
-        [Space(15)]
-
-        public bool zoomEnabled = true;
-
-        public ZoomSettings zoomSettings;
-
-        [System.Serializable]
-        public class ZoomSettings
-        {
-            public float FOVWhileZooming = 36;
-
-            public float FOVLerpSpeed = 20;
-
-            public float FOVResetLerpSpeed = 20;
-        }
-
+        
         public ControllerState currentControllerState { private set; get; }
         private Transform bodyTransform;
         private float edgeFallFactor = 23;
@@ -594,8 +578,6 @@ namespace Jinwoo.FirstPersonController
             HandleWallRun(dt);
 
             HandleTacticalSprint(dt);
-
-            HandleZoom(dt);
 
             HandleMovementVelocity();
 
@@ -1500,23 +1482,6 @@ namespace Jinwoo.FirstPersonController
         }
 
 
-        private void HandleZoom(float dt)
-        {
-            //Zoom is not enabled
-            if (zoomEnabled == false)
-            {
-                cameraController.ResetFOVLerped(zoomSettings.FOVResetLerpSpeed, dt);
-                return;
-            }
-
-            if (characterInput.IsZoomButtonBeingPressed())
-            {
-                cameraController.SetFOVLerped(cameraController.GetDefaultFOV() - Camera.HorizontalToVerticalFieldOfView(zoomSettings.FOVWhileZooming, cameraController.GetCamera().aspect), zoomSettings.FOVLerpSpeed, dt);
-            }
-            else
-                cameraController.ResetFOVLerped(zoomSettings.FOVResetLerpSpeed, dt);
-        }
-
         private void HandleMovementVelocity()
         {
             Vector3 direction = InputToMovementDirection();
@@ -2192,8 +2157,8 @@ namespace Jinwoo.FirstPersonController
 
         private bool CheckClimb(bool autoClimb = false)
         {
-            //Climbing requires the player pressing the forward input and the character being in air 
-            //For example jumping or falling while moving towards a wall
+            //등반을 하려면 플레이어가 전방 입력을 누르고 캐릭터가 공중에 있어야 함
+            //예를 들어 벽을 향해 이동하는 동안 점프 또는 낙하
 
             if ((vertical > 0 && (isGrounded == false || isJumpButtonDown)) || autoClimb)
             {
@@ -2483,53 +2448,10 @@ namespace Jinwoo.FirstPersonController
             return angle;
         }
 
-        public static void DrawWireCapsule(Vector3 p1, Vector3 p2, float radius)
-        {
-#if UNITY_EDITOR
-            // Special case when both points are in the same position
-            if (p1 == p2)
-            {
-                // DrawWireSphere works only in gizmo methods
-                Gizmos.DrawWireSphere(p1, radius);
-                return;
-            }
-            using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
-            {
-                Quaternion p1Rotation = Quaternion.LookRotation(p1 - p2);
-                Quaternion p2Rotation = Quaternion.LookRotation(p2 - p1);
-                // Check if capsule direction is collinear to Vector.up
-                float c = Vector3.Dot((p1 - p2).normalized, Vector3.up);
-                if (c == 1f || c == -1f)
-                {
-                    // Fix rotation
-                    p2Rotation = Quaternion.Euler(p2Rotation.eulerAngles.x, p2Rotation.eulerAngles.y + 180f, p2Rotation.eulerAngles.z);
-                }
-                // First side
-                UnityEditor.Handles.DrawWireArc(p1, p1Rotation * Vector3.left, p1Rotation * Vector3.down, 180f, radius);
-                UnityEditor.Handles.DrawWireArc(p1, p1Rotation * Vector3.up, p1Rotation * Vector3.left, 180f, radius);
-                UnityEditor.Handles.DrawWireDisc(p1, (p2 - p1).normalized, radius);
-                // Second side
-                UnityEditor.Handles.DrawWireArc(p2, p2Rotation * Vector3.left, p2Rotation * Vector3.down, 180f, radius);
-                UnityEditor.Handles.DrawWireArc(p2, p2Rotation * Vector3.up, p2Rotation * Vector3.left, 180f, radius);
-                UnityEditor.Handles.DrawWireDisc(p2, (p1 - p2).normalized, radius);
-                // Lines
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.down * radius, p2 + p2Rotation * Vector3.down * radius);
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.left * radius, p2 + p2Rotation * Vector3.right * radius);
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.up * radius, p2 + p2Rotation * Vector3.up * radius);
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.right * radius, p2 + p2Rotation * Vector3.left * radius);
-            }
-#endif
-        }
+      
 
         Vector3 climbGizmosP1;
         Vector3 climbGizmosP2;
-
-        private void OnDrawGizmos()
-        {
-            return;
-            Gizmos.color = Color.red;
-            DrawWireCapsule(climbGizmosP1, climbGizmosP2, characterController.radius);
-        }
 
         #endregion
 

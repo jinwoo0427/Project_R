@@ -63,6 +63,7 @@ namespace Jinwoo.FirstPersonController
 
 		//Transform 캐싱변수
 		private Transform tr;
+
 		private float defaultFov;
 
 		private float headbobCurrentMovementSpeed;
@@ -211,24 +212,34 @@ namespace Jinwoo.FirstPersonController
 			//키보드 입력 direction 절댓값
 			Vector2 absInputDirection = new Vector2(Mathf.Abs(controller.GetInputDirection().x), Mathf.Abs(controller.GetInputDirection().y));
 			
-			//좌우 입력 또는 가만히 있을때는 0
+			//좌우 입력 또는 가만히 있을때는 수평인텐시티만 0
 			if (absInputDirection.x > 0 || (absInputDirection.x == 0 && absInputDirection.y == 0))
 			{
 				currentIntensityHorizontal = 0;
 			}
 			else
 			{
+				//애니메이션 커브값에 따른(0~1) 수평인텐시티값
 				currentIntensityHorizontal = headbobSettings.maxHorizontalIntensity * 
 					headbobSettings.horizontalIntensityCurve.Evaluate(speedPercentage); 
 			}
 
-			float currentIntensityVertical = headbobSettings.maxVerticalIntensity * headbobSettings.verticalIntensityCurve.Evaluate(speedPercentage);
-			Vector3 targetOffset = new Vector3(currentIntensityHorizontal * (Mathf.Pow(
-				currentMovementSpeed / controller.horizontalSpeedSettings.defaultSpeed, headbobSettings.intensitySpeedMultiplier)), 
-				currentIntensityVertical * (Mathf.Pow(
-					currentMovementSpeed / controller.horizontalSpeedSettings.defaultSpeed, headbobSettings.intensitySpeedMultiplier)), 0);
+			//애니메이션 커브값에 따른(0~1) 수직인텐시티값
+			float currentIntensityVertical = headbobSettings.maxVerticalIntensity * 
+				headbobSettings.verticalIntensityCurve.Evaluate(speedPercentage);
 
+
+			Vector3 targetOffset = new Vector3(
+				//수평 인텐시티에 기본 속도비율에 인텐시티스피드멀티플라이어를 제곱
+				currentIntensityHorizontal * (Mathf.Pow(
+				currentMovementSpeed / controller.horizontalSpeedSettings.defaultSpeed, headbobSettings.intensitySpeedMultiplier))
+				, currentIntensityVertical * (Mathf.Pow(
+				currentMovementSpeed / controller.horizontalSpeedSettings.defaultSpeed, headbobSettings.intensitySpeedMultiplier))
+				, 0);
+
+			//현재 헤드밥오프셋을 lerp로 부드럽게 함 (현재값에서, targetOffset값까지)럴프
 			headbobCurrentOffset = Vector3.Lerp(headbobCurrentOffset, targetOffset, headbobSettings.lerpSpeed * Time.deltaTime);
+			//현재포지션에서 오프셋값 더한 걸로 바꿈
 			headbobSettings.target.localPosition = headbobTargetCurrentLocalPosition + headbobCurrentOffset;
 		}
 
