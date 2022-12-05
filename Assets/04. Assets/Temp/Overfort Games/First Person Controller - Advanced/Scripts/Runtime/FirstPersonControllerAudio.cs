@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
 	//Responsible of handling audio for the 'FirstPersonController' class
 	public class FirstPersonControllerAudio : MonoBehaviour

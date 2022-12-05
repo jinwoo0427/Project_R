@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
     public class FirstPersonController : MonoBehaviour
     {
@@ -21,24 +22,24 @@ namespace OverfortGames.FirstPersonController
 
         #region Fields
 
-        //Events
+        //이벤트
         public event Action<float> OnLand = delegate { };
         public event Action OnJump = delegate { };
         public event Action<int> OnJumpsCountIncrease = delegate { };
-        public event Action OnSlide = delegate { }; //Called each frame
+        public event Action OnSlide = delegate { }; //각 프레임 호출
         public event Action OnEndSlide = delegate { };
         public event Action OnBeginSlide = delegate { };
 
         public event Action OnBeginGrapplingLine = delegate { };
         public event Action OnEndGrapplingLine = delegate { };
         public event Action OnEndFailedGrapplingLine = delegate { };
-        public event Action OnGrapplingLine = delegate { }; //Called each frame
+        public event Action OnGrapplingLine = delegate { }; //각 프레임 호출
         public event Action OnBeginGrappling = delegate { };
         public event Action OnEndGrappling = delegate { };
-        public event Action OnGrappling = delegate { }; //Called each frame
+        public event Action OnGrappling = delegate { }; //각 프레임 호출
 
         public event Action OnBeginWallRun = delegate { };
-        public event Action OnWallRun = delegate { }; //Called each frame
+        public event Action OnWallRun = delegate { }; //각 프레임 호출
         public event Action OnEndWallRun = delegate { };
 
         public event Action OnClimbBegin = delegate { };
@@ -386,32 +387,6 @@ namespace OverfortGames.FirstPersonController
             public float cameraTiltResetLerpSpeed = 10;
         }
 
-        [Space(15)]
-
-        public bool enableLeaning = true;
-
-        public LeaningSettings leaningSettings;
-
-        [System.Serializable]
-        public class LeaningSettings
-        {
-            [Tooltip("Head local position offset when leaning")]
-            public Vector3 headOffset = new Vector3(0.4f, 0, 0);
-
-            public float cameraTiltAngle = 20;
-
-            public float cameraTiltSpeed = 5;
-
-            [Header("Advanced")]
-
-            public float headOffsetLerpSpeed = 10;
-
-            public float headOffsetResetLerpSpeed = 10;
-
-            public float cameraTiltResetSpeed = 10;
-
-            public LayerMask headObstacleLayerMask;
-        }
 
         [Space(15)]
 
@@ -619,8 +594,6 @@ namespace OverfortGames.FirstPersonController
             HandleWallRun(dt);
 
             HandleTacticalSprint(dt);
-
-            HandleLeaning(dt);
 
             HandleZoom(dt);
 
@@ -1321,8 +1294,8 @@ namespace OverfortGames.FirstPersonController
                 //Climbing animation in progress
                 if (climbTimer < 1)
                 {
-                    //Pitch the camera. The rotation amount is determined by the cameraInclinationSpeedCurve 
-                    //Example: time 0 value 1 | time 1 value 0 , means the camera will rotate up and then down for the same amount
+                    //카메라를 피치. 회전량은 cameraInclinationSpeedCurve에 의해 결정
+                    //예: 시간 0 값 1 | 시간 1 값 0 , 카메라가 같은 양만큼 위아래로 회전함을 의미
                     float cameraPitchAmount = climbSettings.cameraInclinationIntensity * climbSettings.cameraInclinationIntensityCurve.Evaluate(climbTimer)
                         * (climbStartDistanceSqr / (climbSettings.durationMaxDistance * climbSettings.durationMaxDistance)) * dt;
 
@@ -1526,54 +1499,6 @@ namespace OverfortGames.FirstPersonController
             currentTacticalSprintTimer += dt;
         }
 
-        private void HandleLeaning(float dt)
-        {
-            //Can't lean while wall running
-            if (enableLeaning == false || currentControllerState == ControllerState.WallRun)
-            {
-                cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-                return;
-            }
-
-            //Left lean
-            if (characterInput.IsLeanLeftButtonBeingPressed())
-            {
-                //Check if there is free space for the head
-                if (Physics.CheckSphere(GetColliderCeilPosition() - bodyTransform.right * leaningSettings.headOffset.x +
-                        bodyTransform.up * leaningSettings.headOffset.y + bodyTransform.forward * leaningSettings.headOffset.z, 0.35f, leaningSettings.headObstacleLayerMask) == false)
-                {
-                    cameraController.SetCameraRootTiltLerped(leaningSettings.cameraTiltAngle, leaningSettings.cameraTiltSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(new Vector3(-leaningSettings.headOffset.x, leaningSettings.headOffset.y, leaningSettings.headOffset.z), leaningSettings.headOffsetLerpSpeed, dt);
-                }
-                else //No free space, reset lean
-                {
-                    cameraController.SetCameraRootTiltLerped(0, leaningSettings.cameraTiltResetSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-                }
-            }
-            //Right lean
-            else if (characterInput.IsLeanRightButtonBeingPressed())
-            {
-                //Check if there is free space for the head
-                if (Physics.CheckSphere(GetColliderCeilPosition() + bodyTransform.right * leaningSettings.headOffset.x +
-                        bodyTransform.up * leaningSettings.headOffset.y + bodyTransform.forward * leaningSettings.headOffset.z, 0.35f, leaningSettings.headObstacleLayerMask) == false)
-                {
-                    cameraController.SetCameraRootTiltLerped(-leaningSettings.cameraTiltAngle, leaningSettings.cameraTiltSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(leaningSettings.headOffset, leaningSettings.headOffsetLerpSpeed, dt);
-                }
-                else //No free space, reset lean
-                {
-                    cameraController.SetCameraRootTiltLerped(0, leaningSettings.cameraTiltResetSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-                }
-            }
-            else //No buttons were pressed, reset lean
-            {
-                cameraController.SetCameraRootTiltLerped(0, leaningSettings.cameraTiltResetSpeed, dt);
-                cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-            }
-
-        }
 
         private void HandleZoom(float dt)
         {
@@ -2558,30 +2483,6 @@ namespace OverfortGames.FirstPersonController
             return angle;
         }
 
-        public static bool ConeCast(Ray ray, float maxRadius, out RaycastHit hit, float maxDistance, float coneAngle, int layerMask)
-        {
-            RaycastHit[] sphereCastHits = Physics.SphereCastAll(new Ray(ray.origin, ray.direction), maxRadius, maxDistance, layerMask);
-
-            if (sphereCastHits.Length > 0)
-            {
-                for (int i = 0; i < sphereCastHits.Length; i++)
-                {
-                    Vector3 hitPoint = sphereCastHits[i].point;
-                    Vector3 directionToHit = hitPoint - ray.origin;
-                    float angleToHit = Vector3.Angle(ray.direction, directionToHit);
-
-                    if (angleToHit < coneAngle)
-                    {
-                        hit = sphereCastHits[i];
-                        return true;
-                    }
-                }
-            }
-
-            hit = default;
-            return false;
-        }
-
         public static void DrawWireCapsule(Vector3 p1, Vector3 p2, float radius)
         {
 #if UNITY_EDITOR
@@ -2618,44 +2519,6 @@ namespace OverfortGames.FirstPersonController
                 UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.right * radius, p2 + p2Rotation * Vector3.left * radius);
             }
 #endif
-        }
-
-        private bool IsInsideMeshCollider(MeshCollider col, Vector3 point)
-        {
-            var temp = Physics.queriesHitBackfaces;
-            Ray ray = new Ray(point, Vector3.back);
-
-            bool hitFrontFace = false;
-            RaycastHit hit = default;
-
-            Physics.queriesHitBackfaces = true;
-            bool hitFrontOrBackFace = col.Raycast(ray, out RaycastHit hit2, 100f);
-            if (hitFrontOrBackFace)
-            {
-                Physics.queriesHitBackfaces = false;
-                hitFrontFace = col.Raycast(ray, out hit, 100f);
-            }
-            Physics.queriesHitBackfaces = temp;
-
-            if (!hitFrontOrBackFace)
-            {
-                return false;
-            }
-            else if (!hitFrontFace)
-            {
-                return true;
-            }
-            else
-            {
-                // This can happen when, for instance, the point is inside the torso but there's a part of the mesh (like the tail) that can still be hit on the front
-                if (hit.distance > hit2.distance)
-                {
-                    return true;
-                }
-                else
-                    return false;
-            }
-
         }
 
         Vector3 climbGizmosP1;

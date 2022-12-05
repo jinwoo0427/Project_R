@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
 	public class CharacterInput : MonoBehaviour
 	{
 		#region Fields
 
-		//True = no smoothing 
 		[SerializeField]
 		private bool useRawInput = true;
 
@@ -30,12 +29,6 @@ namespace OverfortGames.FirstPersonController
 
 		[SerializeField]
 		private string hookInputKey = "Hook";
-
-		[SerializeField]
-		private string leanLeftKey = "LeanLeft";
-
-		[SerializeField]
-		private string leanRightKey = "LeanRight";
 
 		[SerializeField]
 		private string zoomKey = "Zoom";
@@ -66,7 +59,6 @@ namespace OverfortGames.FirstPersonController
 		#region Methods
 		private void Update()
 		{
-			//Force positive and negative input values respectively to 1 and -1
 			if (useRawInput)
 			{
 				horizontalInput = Input.GetAxisRaw(horizontalInputKey);
@@ -91,9 +83,6 @@ namespace OverfortGames.FirstPersonController
 			isProneButtonPressedDown = Input.GetButtonDown(proneInputKey);
 
 			isHookButtonDown = Input.GetButtonDown(hookInputKey);
-
-			isLeanLeftButtonBeingPressed = Input.GetButton(leanLeftKey);
-			isLeanRightButtonBeingPressed = Input.GetButton(leanRightKey);
 
 			isZoomButtonBeingPressed = Input.GetButton(zoomKey);
 
@@ -172,15 +161,6 @@ namespace OverfortGames.FirstPersonController
 			return isSlideButtonBeingPressed;
 		}
 
-		public bool IsLeanLeftButtonBeingPressed()
-		{
-			return isLeanLeftButtonBeingPressed;
-		}
-
-		public bool IsLeanRightButtonBeingPressed()
-		{
-			return isLeanRightButtonBeingPressed;
-		}
 
 		public bool IsHookButtonDown()
 		{

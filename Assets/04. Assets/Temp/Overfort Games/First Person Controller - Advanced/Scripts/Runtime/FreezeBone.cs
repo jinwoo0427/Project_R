@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace OverfortGames.FirstPersonController.Test
+namespace Jinwoo.FirstPersonController.Test
 {
     public class FreezeBone : MonoBehaviour
     {
