@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace OverfortGames.FirstPersonController.Test
+namespace Jinwoo.FirstPersonController.Test
 {
 
     public class DrawBoundsGizmos : MonoBehaviour

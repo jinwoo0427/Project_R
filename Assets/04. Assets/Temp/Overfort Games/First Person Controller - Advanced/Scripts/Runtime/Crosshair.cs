@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
     public class Crosshair : MonoBehaviour
     {

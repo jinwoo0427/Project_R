@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
     //Handy way of playing clips using ids and static methods
     public class AudioLibrary : MonoBehaviour

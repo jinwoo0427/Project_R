@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
     public class FirstPersonController : MonoBehaviour
     {
@@ -21,24 +22,24 @@ namespace OverfortGames.FirstPersonController
 
         #region Fields
 
-        //Events
+        //이벤트
         public event Action<float> OnLand = delegate { };
         public event Action OnJump = delegate { };
         public event Action<int> OnJumpsCountIncrease = delegate { };
-        public event Action OnSlide = delegate { }; //Called each frame
+        public event Action OnSlide = delegate { }; //각 프레임 호출
         public event Action OnEndSlide = delegate { };
         public event Action OnBeginSlide = delegate { };
 
         public event Action OnBeginGrapplingLine = delegate { };
         public event Action OnEndGrapplingLine = delegate { };
         public event Action OnEndFailedGrapplingLine = delegate { };
-        public event Action OnGrapplingLine = delegate { }; //Called each frame
+        public event Action OnGrapplingLine = delegate { }; //각 프레임 호출
         public event Action OnBeginGrappling = delegate { };
         public event Action OnEndGrappling = delegate { };
-        public event Action OnGrappling = delegate { }; //Called each frame
+        public event Action OnGrappling = delegate { }; //각 프레임 호출
 
         public event Action OnBeginWallRun = delegate { };
-        public event Action OnWallRun = delegate { }; //Called each frame
+        public event Action OnWallRun = delegate { }; //각 프레임 호출
         public event Action OnEndWallRun = delegate { };
 
         public event Action OnClimbBegin = delegate { };
@@ -58,7 +59,7 @@ namespace OverfortGames.FirstPersonController
 
         public Transform cameraTransform;
 
-        //States variables
+        //스테이트 값
         private bool isGrounded;
         private bool isSliding;
         private float horizontal;
@@ -386,49 +387,7 @@ namespace OverfortGames.FirstPersonController
             public float cameraTiltResetLerpSpeed = 10;
         }
 
-        [Space(15)]
-
-        public bool enableLeaning = true;
-
-        public LeaningSettings leaningSettings;
-
-        [System.Serializable]
-        public class LeaningSettings
-        {
-            [Tooltip("Head local position offset when leaning")]
-            public Vector3 headOffset = new Vector3(0.4f, 0, 0);
-
-            public float cameraTiltAngle = 20;
-
-            public float cameraTiltSpeed = 5;
-
-            [Header("Advanced")]
-
-            public float headOffsetLerpSpeed = 10;
-
-            public float headOffsetResetLerpSpeed = 10;
-
-            public float cameraTiltResetSpeed = 10;
-
-            public LayerMask headObstacleLayerMask;
-        }
-
-        [Space(15)]
-
-        public bool zoomEnabled = true;
-
-        public ZoomSettings zoomSettings;
-
-        [System.Serializable]
-        public class ZoomSettings
-        {
-            public float FOVWhileZooming = 36;
-
-            public float FOVLerpSpeed = 20;
-
-            public float FOVResetLerpSpeed = 20;
-        }
-
+        
         public ControllerState currentControllerState { private set; get; }
         private Transform bodyTransform;
         private float edgeFallFactor = 23;
@@ -519,7 +478,6 @@ namespace OverfortGames.FirstPersonController
 
         private void Awake()
         {
-            //Caching transform is faster in older versions of Unity
             tr = transform;
             bodyTransform = tr;
 
@@ -532,24 +490,23 @@ namespace OverfortGames.FirstPersonController
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            //Set up grappling line spring
             grapplingLineSpring = new Spring();
             grapplingLineSpring.SetTarget(0);
         }
 
-        //This method is called during CharacterController.Move()
+
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            //Gather last collider hit normal occured during CharacterController.Move() 
+
             currentGroundNormalController = hit.normal;
 
             if (enableCollisionPush)
             {
-                //Call responsible for pushing objects
+
                 TryPushObject(hit);
             }
 
-            //Handle platform detection
+
             if (hit.moveDirection.y < -0.9 && hit.normal.y > 0.41)
             {
                 if (standingPlatform != hit.collider.transform)
@@ -567,7 +524,6 @@ namespace OverfortGames.FirstPersonController
 
         private void Update()
         {
-            //Gather inputs data
             horizontal = characterInput.GetHorizontalMovementInput();
             vertical = characterInput.GetVerticalMovementInput();
             isJumpButtonBeingPressed = characterInput.IsJumpButtonBeingPressed();
@@ -593,14 +549,10 @@ namespace OverfortGames.FirstPersonController
             HandlePlatforms();
         }
 
-        //This is where the magic happens
         public void Simulate(float dt, bool callbacksEnabled)
         {
-            //Enable events calling like OnSlide, OnJump etc...
             this.callbacksEnabled = callbacksEnabled;
 
-            //Gather current ground normal
-            //This will be useful in future calculations
             Vector3 rayOrigin = GetTransformOrigin();
             Ray ray = new Ray(rayOrigin, Vector3.down);
             if (Physics.Raycast(ray, out var hit, 100))
@@ -620,10 +572,6 @@ namespace OverfortGames.FirstPersonController
 
             HandleTacticalSprint(dt);
 
-            HandleLeaning(dt);
-
-            HandleZoom(dt);
-
             HandleMovementVelocity();
 
             HandleJump(dt);
@@ -636,7 +584,7 @@ namespace OverfortGames.FirstPersonController
 
             ApplyMovement(dt);
 
-            //Save last used states 
+
             previousMovement = movement;
             previousIsSliding = isSliding;
             previousIsGrounded = isGrounded;
@@ -644,26 +592,19 @@ namespace OverfortGames.FirstPersonController
 
             velocity = characterController.velocity;
 
-            //Handle camera rotation - Camera is locked during climb
+
             if (currentControllerState != ControllerState.Climb)
                 cameraController.RotateCamera(cameraHorizontal, cameraVertical, dt);
         }
 
         public bool CheckForGround()
         {
-            //--------------------------------------------------------------------------------------------------
-            //The default 'CharacterController.isGrounded' check happens at the whole base of the collider.
-            //Through a raycast we make sure that specifically the center of the collider is also grounded 
-            //--------------------------------------------------------------------------------------------------
 
-            //Gather the slope values from the 'CharacterController' collider hit and from a raycast 
             currentGroundSlope = CalculateSlope(currentGroundNormal);
             float controllerGroundNormalSlope = CalculateSlope(currentGroundNormalController);
 
-            //Select the maximum value from the two for a worst case scenario
             float slope = controllerGroundNormalSlope > currentGroundSlope ? controllerGroundNormalSlope : currentGroundSlope;
 
-            //The raycast distance depends on the current slope value of the ground
             float rayMaxDistance = Mathf.Max(slope / characterController.slopeLimit, characterController.stepOffset + 0.01f);
 
             raycastIsGrounded = Physics.Raycast(new Ray(GetTransformOrigin(), Vector3.down), rayMaxDistance);
@@ -709,7 +650,6 @@ namespace OverfortGames.FirstPersonController
                     //Standing ---> Crouched
                     if (enableCrouch && IsSlidingButtonPressedDown() && isMorphingCollider == false)
                     {
-                        //We want to morph the collider to crouched
                         SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
 
                         return ControllerState.Crouched;
@@ -732,7 +672,6 @@ namespace OverfortGames.FirstPersonController
 
                 case ControllerState.InAir:
 
-                    //Morph or reset the collider height while landing
                     if (movement.y < 0 && isMorphingCollider == false)
                     {
                         if (colliderLandingMorph)
@@ -759,11 +698,10 @@ namespace OverfortGames.FirstPersonController
                         return ControllerState.Grappling;
                     }
 
-                    //We want to go from InAir to Sliding directly
                     if (enableSlide && IsSlidingButtonPressedDown())
                         wishToSlide = true;
 
-                    //InAir ---> Sliding (go directly to Sliding when falling if the sliding button was pressed)
+                    //InAir ---> Sliding 
                     if (enableSlide && isGrounded && wishToSlide && isMorphingCollider == false)
                     {
                         //Preset momentum
@@ -1321,8 +1259,8 @@ namespace OverfortGames.FirstPersonController
                 //Climbing animation in progress
                 if (climbTimer < 1)
                 {
-                    //Pitch the camera. The rotation amount is determined by the cameraInclinationSpeedCurve 
-                    //Example: time 0 value 1 | time 1 value 0 , means the camera will rotate up and then down for the same amount
+                    //카메라를 피치. 회전량은 cameraInclinationSpeedCurve에 의해 결정
+                    //예: 시간 0 값 1 | 시간 1 값 0 , 카메라가 같은 양만큼 위아래로 회전함을 의미
                     float cameraPitchAmount = climbSettings.cameraInclinationIntensity * climbSettings.cameraInclinationIntensityCurve.Evaluate(climbTimer)
                         * (climbStartDistanceSqr / (climbSettings.durationMaxDistance * climbSettings.durationMaxDistance)) * dt;
 
@@ -1412,8 +1350,7 @@ namespace OverfortGames.FirstPersonController
                 {
                     grapplingDirectionStart = (grapplingCurrentPoint - GetTransformOrigin()).normalized;
 
-                    //If we have a target start the grappling movement of the character, 
-                    //the character will be set to Grappling state in the next DetermineControllerState() call
+                    
                     if (grapplingTarget != null)
                     {
                         OnEndGrapplingLine();
@@ -1462,7 +1399,6 @@ namespace OverfortGames.FirstPersonController
             }
 
 
-            //If the character is spinning around an object (the angle from the attach position > 90) and the timer exceed the time limit, detach the character
             if (Vector3.Angle(grapplingDirection, grapplingDirectionStart) > grapplingHookSettings.detachAngleCondition)
             {
                 grapplingCurrentDetachTimer += dt;
@@ -1487,8 +1423,6 @@ namespace OverfortGames.FirstPersonController
                 lastTimeBeginWallRun = 0;
             }
 
-            //Handle camera tilt
-            //The camera will tilt depending on the angle the character is looking at the wall
             if (currentControllerState == ControllerState.WallRun && Vector3.Dot(currentWallRunNormal, bodyTransform.forward) < 0.5f)
             {
                 float angle = Vector3.SignedAngle(bodyTransform.forward, currentWallRunDirection, bodyTransform.up);
@@ -1498,7 +1432,7 @@ namespace OverfortGames.FirstPersonController
                 {
                     cameraController.SetCameraRootTiltLerped(angle / 90 * wallRunSettings.cameraTiltAngle, wallRunSettings.cameraTiltLerpSpeed, dt);
                 }
-                else //The camera tilt value target is fixed. 0 if the character is looking at the wall within 20 degrees, cameraTiltAngle if the character is looking away from the wall
+                else 
                 {
                     float unsignedAngle = Mathf.Abs(angle);
                     if (unsignedAngle > 20)
@@ -1526,71 +1460,6 @@ namespace OverfortGames.FirstPersonController
             currentTacticalSprintTimer += dt;
         }
 
-        private void HandleLeaning(float dt)
-        {
-            //Can't lean while wall running
-            if (enableLeaning == false || currentControllerState == ControllerState.WallRun)
-            {
-                cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-                return;
-            }
-
-            //Left lean
-            if (characterInput.IsLeanLeftButtonBeingPressed())
-            {
-                //Check if there is free space for the head
-                if (Physics.CheckSphere(GetColliderCeilPosition() - bodyTransform.right * leaningSettings.headOffset.x +
-                        bodyTransform.up * leaningSettings.headOffset.y + bodyTransform.forward * leaningSettings.headOffset.z, 0.35f, leaningSettings.headObstacleLayerMask) == false)
-                {
-                    cameraController.SetCameraRootTiltLerped(leaningSettings.cameraTiltAngle, leaningSettings.cameraTiltSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(new Vector3(-leaningSettings.headOffset.x, leaningSettings.headOffset.y, leaningSettings.headOffset.z), leaningSettings.headOffsetLerpSpeed, dt);
-                }
-                else //No free space, reset lean
-                {
-                    cameraController.SetCameraRootTiltLerped(0, leaningSettings.cameraTiltResetSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-                }
-            }
-            //Right lean
-            else if (characterInput.IsLeanRightButtonBeingPressed())
-            {
-                //Check if there is free space for the head
-                if (Physics.CheckSphere(GetColliderCeilPosition() + bodyTransform.right * leaningSettings.headOffset.x +
-                        bodyTransform.up * leaningSettings.headOffset.y + bodyTransform.forward * leaningSettings.headOffset.z, 0.35f, leaningSettings.headObstacleLayerMask) == false)
-                {
-                    cameraController.SetCameraRootTiltLerped(-leaningSettings.cameraTiltAngle, leaningSettings.cameraTiltSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(leaningSettings.headOffset, leaningSettings.headOffsetLerpSpeed, dt);
-                }
-                else //No free space, reset lean
-                {
-                    cameraController.SetCameraRootTiltLerped(0, leaningSettings.cameraTiltResetSpeed, dt);
-                    cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-                }
-            }
-            else //No buttons were pressed, reset lean
-            {
-                cameraController.SetCameraRootTiltLerped(0, leaningSettings.cameraTiltResetSpeed, dt);
-                cameraController.SetCameraRootOffsetLerped(Vector3.zero, leaningSettings.headOffsetResetLerpSpeed, dt);
-            }
-
-        }
-
-        private void HandleZoom(float dt)
-        {
-            //Zoom is not enabled
-            if (zoomEnabled == false)
-            {
-                cameraController.ResetFOVLerped(zoomSettings.FOVResetLerpSpeed, dt);
-                return;
-            }
-
-            if (characterInput.IsZoomButtonBeingPressed())
-            {
-                cameraController.SetFOVLerped(cameraController.GetDefaultFOV() - Camera.HorizontalToVerticalFieldOfView(zoomSettings.FOVWhileZooming, cameraController.GetCamera().aspect), zoomSettings.FOVLerpSpeed, dt);
-            }
-            else
-                cameraController.ResetFOVLerped(zoomSettings.FOVResetLerpSpeed, dt);
-        }
 
         private void HandleMovementVelocity()
         {
@@ -1763,16 +1632,13 @@ namespace OverfortGames.FirstPersonController
                 }
             }
 
-            //Adjust jump speed depending on the gravity modifier while in wall run (so that a jump height will always be the same depending on the gravity)
             if (currentControllerState == ControllerState.WallRun)
             {
                 currentJumpSpeed = jumpSettings.jumpForce * wallRunSettings.wallRunGravity / defaultGravityModifier;
             }
 
-            //Adaptive jump means the character will jump further if you hold down the jump button
             if (jumpSettings.adaptiveJump)
             {
-                //Add jump speed only if it still has jumping timer and hasn't released the jump button yet, and the character is grounded or has jumping edge timer
                 if ((isJumpButtonBeingPressed && currentJumpTimer < jumpSettings.adaptiveJumpDuration)
                     && (isGrounded || IsJumpEdgeTimer() || (currentJumpsCount <= jumpSettings.jumpsCount && currentJumpsCount > 0))
                     && jumpLocked == false && currentControllerState != ControllerState.Proned && IsColliderSpaceFree(defaultColliderHeight * 1.5f))
@@ -1883,8 +1749,6 @@ namespace OverfortGames.FirstPersonController
                     //We are not in a slope, slow down the momentum using 'slideFriction' value
                     momentum = IncrementVectorTowardTargetVector(momentum, slideSettings.groundFriction, dt, Vector3.zero);
 
-                    //Then slow it down again based on the angle the character is facing while sliding. 
-                    //If the character is sliding in a direction but he turns the camera the opposite way, he will slow down much faster
                     momentum = IncrementVectorTowardTargetVector(momentum, Vector3.Angle(momentum.normalized, groundDirection) * slideSettings.cameraRotationFrictionFactor, dt, Vector3.zero);
                 }
 
@@ -2055,9 +1919,6 @@ namespace OverfortGames.FirstPersonController
 
         private void HandleEdgeFalling()
         {
-            //If we are not grounded but the CharacterController says we are grounded it means we are on an edge and we should fall down
-            //The CharacterController ground check is much more less accurate, for more information about the Unity CharacterController see
-            //https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/CharacterControllers.html#kinematic-character-controller
             if (raycastIsGrounded == false && characterController.isGrounded && isClimbingAnimation == false)
             {
                 //Create a ray pointing down world space
@@ -2242,7 +2103,6 @@ namespace OverfortGames.FirstPersonController
             return tr.TransformPoint(characterController.center);
         }
 
-        //World position of the collider ceil
         public Vector3 GetColliderCeilPosition()
         {
             return transform.TransformPoint(characterController.center + Vector3.up * characterController.height / 2);
@@ -2255,8 +2115,6 @@ namespace OverfortGames.FirstPersonController
 
         private Vector3 GetTransformOrigin()
         {
-            //If it's crouching/sliding the origin position will be at the base of the collider, if it's not it will be at the transform position.
-            //We add vertically 0.05f just to make sure to avoid the ray starting under ground in the case of the character being grounded
             return GetColliderBasePosition() + Vector3.up * 0.05f;
         }
 
@@ -2267,8 +2125,8 @@ namespace OverfortGames.FirstPersonController
 
         private bool CheckClimb(bool autoClimb = false)
         {
-            //Climbing requires the player pressing the forward input and the character being in air 
-            //For example jumping or falling while moving towards a wall
+            //등반을 하려면 플레이어가 전방 입력을 누르고 캐릭터가 공중에 있어야 함
+            //예를 들어 벽을 향해 이동하는 동안 점프 또는 낙하
 
             if ((vertical > 0 && (isGrounded == false || isJumpButtonDown)) || autoClimb)
             {
@@ -2438,7 +2296,7 @@ namespace OverfortGames.FirstPersonController
                     if (grapplingLineSegmentsPositions == null)
                         grapplingLineSegmentsPositions = new Vector3[grapplingHookSettings.lineRendererSegmentCount + 1];
 
-                    //Animate the line renderer segments to simulate a rope
+
                     for (var i = 0; i < grapplingHookSettings.lineRendererSegmentCount + 1; i++)
                     {
                         var delta = i / (float)grapplingHookSettings.lineRendererSegmentCount;
@@ -2479,12 +2337,10 @@ namespace OverfortGames.FirstPersonController
                 grapplingLineHook = Instantiate(grapplingHookSettings.hookPrefab, grapplingLine.transform);
             }
 
-            //Reset the grappling line spring
             grapplingLineSpring.Reset();
             if (grapplingLine.positionCount > 0)
                 grapplingLine.positionCount = 0;
 
-            //Rotate the hook to look towards the direction it has been fired
             grapplingLineHook.transform.rotation = Quaternion.LookRotation((grapplingDestinationPoint.Value - grapplingCurrentPoint).normalized, Vector3.up);
 
             OnBeginGrapplingLine();
@@ -2499,8 +2355,6 @@ namespace OverfortGames.FirstPersonController
         {
             Vector3 direction = Vector3.zero;
 
-            //Calculate x and z movement. Projecting on plane guarantees the direction to be horizontal in relation to the character upward direction. 
-            //For example if the character was upside down this would guarantee it to still move accurately
             direction += Vector3.ProjectOnPlane(cameraTransform.right, tr.up).normalized * horizontal;
             direction += Vector3.ProjectOnPlane(cameraTransform.forward, tr.up).normalized * vertical;
             direction.y = 0;
@@ -2549,7 +2403,7 @@ namespace OverfortGames.FirstPersonController
 
         public static float SignedAngle360(Vector3 from, Vector3 to, Vector3 normal)
         {
-            float angle = Vector3.SignedAngle(from, to, normal); //Returns the angle between -180 and 180.
+            float angle = Vector3.SignedAngle(from, to, normal);
             if (angle < 0)
             {
                 angle = 360 - angle * -1;
@@ -2558,115 +2412,10 @@ namespace OverfortGames.FirstPersonController
             return angle;
         }
 
-        public static bool ConeCast(Ray ray, float maxRadius, out RaycastHit hit, float maxDistance, float coneAngle, int layerMask)
-        {
-            RaycastHit[] sphereCastHits = Physics.SphereCastAll(new Ray(ray.origin, ray.direction), maxRadius, maxDistance, layerMask);
-
-            if (sphereCastHits.Length > 0)
-            {
-                for (int i = 0; i < sphereCastHits.Length; i++)
-                {
-                    Vector3 hitPoint = sphereCastHits[i].point;
-                    Vector3 directionToHit = hitPoint - ray.origin;
-                    float angleToHit = Vector3.Angle(ray.direction, directionToHit);
-
-                    if (angleToHit < coneAngle)
-                    {
-                        hit = sphereCastHits[i];
-                        return true;
-                    }
-                }
-            }
-
-            hit = default;
-            return false;
-        }
-
-        public static void DrawWireCapsule(Vector3 p1, Vector3 p2, float radius)
-        {
-#if UNITY_EDITOR
-            // Special case when both points are in the same position
-            if (p1 == p2)
-            {
-                // DrawWireSphere works only in gizmo methods
-                Gizmos.DrawWireSphere(p1, radius);
-                return;
-            }
-            using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
-            {
-                Quaternion p1Rotation = Quaternion.LookRotation(p1 - p2);
-                Quaternion p2Rotation = Quaternion.LookRotation(p2 - p1);
-                // Check if capsule direction is collinear to Vector.up
-                float c = Vector3.Dot((p1 - p2).normalized, Vector3.up);
-                if (c == 1f || c == -1f)
-                {
-                    // Fix rotation
-                    p2Rotation = Quaternion.Euler(p2Rotation.eulerAngles.x, p2Rotation.eulerAngles.y + 180f, p2Rotation.eulerAngles.z);
-                }
-                // First side
-                UnityEditor.Handles.DrawWireArc(p1, p1Rotation * Vector3.left, p1Rotation * Vector3.down, 180f, radius);
-                UnityEditor.Handles.DrawWireArc(p1, p1Rotation * Vector3.up, p1Rotation * Vector3.left, 180f, radius);
-                UnityEditor.Handles.DrawWireDisc(p1, (p2 - p1).normalized, radius);
-                // Second side
-                UnityEditor.Handles.DrawWireArc(p2, p2Rotation * Vector3.left, p2Rotation * Vector3.down, 180f, radius);
-                UnityEditor.Handles.DrawWireArc(p2, p2Rotation * Vector3.up, p2Rotation * Vector3.left, 180f, radius);
-                UnityEditor.Handles.DrawWireDisc(p2, (p1 - p2).normalized, radius);
-                // Lines
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.down * radius, p2 + p2Rotation * Vector3.down * radius);
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.left * radius, p2 + p2Rotation * Vector3.right * radius);
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.up * radius, p2 + p2Rotation * Vector3.up * radius);
-                UnityEditor.Handles.DrawLine(p1 + p1Rotation * Vector3.right * radius, p2 + p2Rotation * Vector3.left * radius);
-            }
-#endif
-        }
-
-        private bool IsInsideMeshCollider(MeshCollider col, Vector3 point)
-        {
-            var temp = Physics.queriesHitBackfaces;
-            Ray ray = new Ray(point, Vector3.back);
-
-            bool hitFrontFace = false;
-            RaycastHit hit = default;
-
-            Physics.queriesHitBackfaces = true;
-            bool hitFrontOrBackFace = col.Raycast(ray, out RaycastHit hit2, 100f);
-            if (hitFrontOrBackFace)
-            {
-                Physics.queriesHitBackfaces = false;
-                hitFrontFace = col.Raycast(ray, out hit, 100f);
-            }
-            Physics.queriesHitBackfaces = temp;
-
-            if (!hitFrontOrBackFace)
-            {
-                return false;
-            }
-            else if (!hitFrontFace)
-            {
-                return true;
-            }
-            else
-            {
-                // This can happen when, for instance, the point is inside the torso but there's a part of the mesh (like the tail) that can still be hit on the front
-                if (hit.distance > hit2.distance)
-                {
-                    return true;
-                }
-                else
-                    return false;
-            }
-
-        }
+      
 
         Vector3 climbGizmosP1;
         Vector3 climbGizmosP2;
-
-        private void OnDrawGizmos()
-        {
-            return;
-            Gizmos.color = Color.red;
-            DrawWireCapsule(climbGizmosP1, climbGizmosP2, characterController.radius);
-        }
 
         #endregion
 

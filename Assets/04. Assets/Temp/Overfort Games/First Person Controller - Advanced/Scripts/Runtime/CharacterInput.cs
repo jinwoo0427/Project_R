@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
 	public class CharacterInput : MonoBehaviour
 	{
 		#region Fields
 
-		//True = no smoothing 
 		[SerializeField]
 		private bool useRawInput = true;
 
@@ -32,12 +31,6 @@ namespace OverfortGames.FirstPersonController
 		private string hookInputKey = "Hook";
 
 		[SerializeField]
-		private string leanLeftKey = "LeanLeft";
-
-		[SerializeField]
-		private string leanRightKey = "LeanRight";
-
-		[SerializeField]
 		private string zoomKey = "Zoom";
 
 
@@ -54,8 +47,6 @@ namespace OverfortGames.FirstPersonController
 		private bool isHookButtonDown;
 		private bool isRunButtonPressedDown;
 		private bool isRunButtonDoublePressedDown;
-		private bool isLeanLeftButtonBeingPressed;
-		private bool isLeanRightButtonBeingPressed;
 		private bool isZoomButtonBeingPressed;
 
 		private float lastTimeRunButtonBeingPressed;
@@ -66,7 +57,6 @@ namespace OverfortGames.FirstPersonController
 		#region Methods
 		private void Update()
 		{
-			//Force positive and negative input values respectively to 1 and -1
 			if (useRawInput)
 			{
 				horizontalInput = Input.GetAxisRaw(horizontalInputKey);
@@ -92,9 +82,6 @@ namespace OverfortGames.FirstPersonController
 
 			isHookButtonDown = Input.GetButtonDown(hookInputKey);
 
-			isLeanLeftButtonBeingPressed = Input.GetButton(leanLeftKey);
-			isLeanRightButtonBeingPressed = Input.GetButton(leanRightKey);
-
 			isZoomButtonBeingPressed = Input.GetButton(zoomKey);
 
 			if (isRunButtonPressedDown)
@@ -110,7 +97,7 @@ namespace OverfortGames.FirstPersonController
 
 		private void LateUpdate()
 		{
-			//Reset Up/Down input flags
+			//업다운 인풋 리셋
 			isRunButtonDoublePressedDown = false;
 		}
 
@@ -172,15 +159,6 @@ namespace OverfortGames.FirstPersonController
 			return isSlideButtonBeingPressed;
 		}
 
-		public bool IsLeanLeftButtonBeingPressed()
-		{
-			return isLeanLeftButtonBeingPressed;
-		}
-
-		public bool IsLeanRightButtonBeingPressed()
-		{
-			return isLeanRightButtonBeingPressed;
-		}
 
 		public bool IsHookButtonDown()
 		{

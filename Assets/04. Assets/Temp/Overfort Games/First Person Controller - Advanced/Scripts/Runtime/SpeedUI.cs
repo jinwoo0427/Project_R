@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
     public class SpeedUI : MonoBehaviour
     {

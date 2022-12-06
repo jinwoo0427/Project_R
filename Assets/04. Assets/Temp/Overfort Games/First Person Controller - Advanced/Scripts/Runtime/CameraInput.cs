@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace OverfortGames.FirstPersonController
+namespace Jinwoo.FirstPersonController
 {
     public class CameraInput : MonoBehaviour
     {
@@ -12,29 +12,28 @@ namespace OverfortGames.FirstPersonController
         [SerializeField]
         private string mouseVerticalInput = "Mouse Y";
 
-        //The inputs will be multiplied by this value
+        //민감도(마우스 감도)
         [SerializeField]
         private float sensitivity = 0.01f;
-
-        [SerializeField]
-        private bool invertInputHorizontal;
-
-        [SerializeField]
-        private bool invertInputVertical;
 
         #endregion
 
         #region Methods
 
+
+        /// <summary>
+        /// 좌우 마우스 움직임 값 반환
+        /// </summary>
+        /// <returns></returns>
         public float GetHorizontal()
         {
             float input = Input.GetAxisRaw(mouseHorizontalInput);
 
-            //Adjust input on timeScale
-            if (Time.timeScale > 0f)
+            //타임 스캐일로 움직임 조정
+            if (Time.timeScale > 0f) //타임 스케일이 0 이상일때만
             {
                 if (Time.deltaTime > 0)
-                    input /= Time.deltaTime;
+                    input /= Time.deltaTime; //input / 1프레임당 실행속도(1/144)
 
                 input *= Time.timeScale;
             }
@@ -43,21 +42,20 @@ namespace OverfortGames.FirstPersonController
                 input = 0;
             }
 
-            //Apply sensitivity
-            input *= sensitivity;
-
-            if (invertInputHorizontal)
-                input *= -1f;
+            //마우스 감도 곱하기
+            input *= sensitivity; 
 
             return input;
         }
-
+        /// <summary>
+        /// 수직 마우스 움직임 값 반환
+        /// </summary>
+        /// <returns></returns>
         public float GetVertical()
         {
-            //Get inverted input - this will result example in: move mouse up - look up ; move mouse down - look down
             float input = -Input.GetAxisRaw(mouseVerticalInput);
 
-            //Adjust input on timeScale
+            //타임 스캐일로 움직임 조정
             if (Time.timeScale > 0)
             {
                 if (Time.deltaTime > 0)
@@ -70,11 +68,8 @@ namespace OverfortGames.FirstPersonController
                 return input;
             }
 
-            //Apply sensitivity
+            //마우스 감도 곱하기
             input *= sensitivity;
-
-            if (invertInputVertical)
-                input *= -1f;
 
             return input;
         }
