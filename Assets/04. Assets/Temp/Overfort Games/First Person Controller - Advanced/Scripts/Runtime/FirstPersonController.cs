@@ -59,7 +59,7 @@ namespace Jinwoo.FirstPersonController
 
         public Transform cameraTransform;
 
-        //States variables
+        //스테이트 값
         private bool isGrounded;
         private bool isSliding;
         private float horizontal;
@@ -606,11 +606,6 @@ namespace Jinwoo.FirstPersonController
 
         public bool CheckForGround()
         {
-            //--------------------------------------------------------------------------------------------------
-            //The default 'CharacterController.isGrounded' check happens at the whole base of the collider.
-            //Through a raycast we make sure that specifically the center of the collider is also grounded 
-            //--------------------------------------------------------------------------------------------------
-
             //Gather the slope values from the 'CharacterController' collider hit and from a raycast 
             currentGroundSlope = CalculateSlope(currentGroundNormal);
             float controllerGroundNormalSlope = CalculateSlope(currentGroundNormalController);

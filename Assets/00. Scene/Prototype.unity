@@ -26536,7 +26536,7 @@ MonoBehaviour:
     movementDeceleration: 0.05
     horizontalMaxSpeed: 30
   jumpSettings:
-    adaptiveJump: 0
+    adaptiveJump: 1
     jumpsCount: 1
     jumpForce: 8
     adaptiveJumpDuration: 0
