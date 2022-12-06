@@ -478,7 +478,6 @@ namespace Jinwoo.FirstPersonController
 
         private void Awake()
         {
-            //Caching transform is faster in older versions of Unity
             tr = transform;
             bodyTransform = tr;
 
@@ -491,24 +490,23 @@ namespace Jinwoo.FirstPersonController
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            //Set up grappling line spring
             grapplingLineSpring = new Spring();
             grapplingLineSpring.SetTarget(0);
         }
 
-        //This method is called during CharacterController.Move()
+
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            //Gather last collider hit normal occured during CharacterController.Move() 
+
             currentGroundNormalController = hit.normal;
 
             if (enableCollisionPush)
             {
-                //Call responsible for pushing objects
+
                 TryPushObject(hit);
             }
 
-            //Handle platform detection
+
             if (hit.moveDirection.y < -0.9 && hit.normal.y > 0.41)
             {
                 if (standingPlatform != hit.collider.transform)
@@ -526,7 +524,6 @@ namespace Jinwoo.FirstPersonController
 
         private void Update()
         {
-            //Gather inputs data
             horizontal = characterInput.GetHorizontalMovementInput();
             vertical = characterInput.GetVerticalMovementInput();
             isJumpButtonBeingPressed = characterInput.IsJumpButtonBeingPressed();
@@ -552,14 +549,10 @@ namespace Jinwoo.FirstPersonController
             HandlePlatforms();
         }
 
-        //This is where the magic happens
         public void Simulate(float dt, bool callbacksEnabled)
         {
-            //Enable events calling like OnSlide, OnJump etc...
             this.callbacksEnabled = callbacksEnabled;
 
-            //Gather current ground normal
-            //This will be useful in future calculations
             Vector3 rayOrigin = GetTransformOrigin();
             Ray ray = new Ray(rayOrigin, Vector3.down);
             if (Physics.Raycast(ray, out var hit, 100))
@@ -591,7 +584,7 @@ namespace Jinwoo.FirstPersonController
 
             ApplyMovement(dt);
 
-            //Save last used states 
+
             previousMovement = movement;
             previousIsSliding = isSliding;
             previousIsGrounded = isGrounded;
@@ -599,21 +592,19 @@ namespace Jinwoo.FirstPersonController
 
             velocity = characterController.velocity;
 
-            //Handle camera rotation - Camera is locked during climb
+
             if (currentControllerState != ControllerState.Climb)
                 cameraController.RotateCamera(cameraHorizontal, cameraVertical, dt);
         }
 
         public bool CheckForGround()
         {
-            //Gather the slope values from the 'CharacterController' collider hit and from a raycast 
+
             currentGroundSlope = CalculateSlope(currentGroundNormal);
             float controllerGroundNormalSlope = CalculateSlope(currentGroundNormalController);
 
-            //Select the maximum value from the two for a worst case scenario
             float slope = controllerGroundNormalSlope > currentGroundSlope ? controllerGroundNormalSlope : currentGroundSlope;
 
-            //The raycast distance depends on the current slope value of the ground
             float rayMaxDistance = Mathf.Max(slope / characterController.slopeLimit, characterController.stepOffset + 0.01f);
 
             raycastIsGrounded = Physics.Raycast(new Ray(GetTransformOrigin(), Vector3.down), rayMaxDistance);
@@ -659,7 +650,6 @@ namespace Jinwoo.FirstPersonController
                     //Standing ---> Crouched
                     if (enableCrouch && IsSlidingButtonPressedDown() && isMorphingCollider == false)
                     {
-                        //We want to morph the collider to crouched
                         SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
 
                         return ControllerState.Crouched;
@@ -682,7 +672,6 @@ namespace Jinwoo.FirstPersonController
 
                 case ControllerState.InAir:
 
-                    //Morph or reset the collider height while landing
                     if (movement.y < 0 && isMorphingCollider == false)
                     {
                         if (colliderLandingMorph)
@@ -709,11 +698,10 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Grappling;
                     }
 
-                    //We want to go from InAir to Sliding directly
                     if (enableSlide && IsSlidingButtonPressedDown())
                         wishToSlide = true;
 
-                    //InAir ---> Sliding (go directly to Sliding when falling if the sliding button was pressed)
+                    //InAir ---> Sliding 
                     if (enableSlide && isGrounded && wishToSlide && isMorphingCollider == false)
                     {
                         //Preset momentum
@@ -1362,8 +1350,7 @@ namespace Jinwoo.FirstPersonController
                 {
                     grapplingDirectionStart = (grapplingCurrentPoint - GetTransformOrigin()).normalized;
 
-                    //If we have a target start the grappling movement of the character, 
-                    //the character will be set to Grappling state in the next DetermineControllerState() call
+                    
                     if (grapplingTarget != null)
                     {
                         OnEndGrapplingLine();
@@ -1412,7 +1399,6 @@ namespace Jinwoo.FirstPersonController
             }
 
 
-            //If the character is spinning around an object (the angle from the attach position > 90) and the timer exceed the time limit, detach the character
             if (Vector3.Angle(grapplingDirection, grapplingDirectionStart) > grapplingHookSettings.detachAngleCondition)
             {
                 grapplingCurrentDetachTimer += dt;
@@ -1437,8 +1423,6 @@ namespace Jinwoo.FirstPersonController
                 lastTimeBeginWallRun = 0;
             }
 
-            //Handle camera tilt
-            //The camera will tilt depending on the angle the character is looking at the wall
             if (currentControllerState == ControllerState.WallRun && Vector3.Dot(currentWallRunNormal, bodyTransform.forward) < 0.5f)
             {
                 float angle = Vector3.SignedAngle(bodyTransform.forward, currentWallRunDirection, bodyTransform.up);
@@ -1448,7 +1432,7 @@ namespace Jinwoo.FirstPersonController
                 {
                     cameraController.SetCameraRootTiltLerped(angle / 90 * wallRunSettings.cameraTiltAngle, wallRunSettings.cameraTiltLerpSpeed, dt);
                 }
-                else //The camera tilt value target is fixed. 0 if the character is looking at the wall within 20 degrees, cameraTiltAngle if the character is looking away from the wall
+                else 
                 {
                     float unsignedAngle = Mathf.Abs(angle);
                     if (unsignedAngle > 20)
@@ -1648,16 +1632,13 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //Adjust jump speed depending on the gravity modifier while in wall run (so that a jump height will always be the same depending on the gravity)
             if (currentControllerState == ControllerState.WallRun)
             {
                 currentJumpSpeed = jumpSettings.jumpForce * wallRunSettings.wallRunGravity / defaultGravityModifier;
             }
 
-            //Adaptive jump means the character will jump further if you hold down the jump button
             if (jumpSettings.adaptiveJump)
             {
-                //Add jump speed only if it still has jumping timer and hasn't released the jump button yet, and the character is grounded or has jumping edge timer
                 if ((isJumpButtonBeingPressed && currentJumpTimer < jumpSettings.adaptiveJumpDuration)
                     && (isGrounded || IsJumpEdgeTimer() || (currentJumpsCount <= jumpSettings.jumpsCount && currentJumpsCount > 0))
                     && jumpLocked == false && currentControllerState != ControllerState.Proned && IsColliderSpaceFree(defaultColliderHeight * 1.5f))
@@ -1768,8 +1749,6 @@ namespace Jinwoo.FirstPersonController
                     //We are not in a slope, slow down the momentum using 'slideFriction' value
                     momentum = IncrementVectorTowardTargetVector(momentum, slideSettings.groundFriction, dt, Vector3.zero);
 
-                    //Then slow it down again based on the angle the character is facing while sliding. 
-                    //If the character is sliding in a direction but he turns the camera the opposite way, he will slow down much faster
                     momentum = IncrementVectorTowardTargetVector(momentum, Vector3.Angle(momentum.normalized, groundDirection) * slideSettings.cameraRotationFrictionFactor, dt, Vector3.zero);
                 }
 
@@ -1940,9 +1919,6 @@ namespace Jinwoo.FirstPersonController
 
         private void HandleEdgeFalling()
         {
-            //If we are not grounded but the CharacterController says we are grounded it means we are on an edge and we should fall down
-            //The CharacterController ground check is much more less accurate, for more information about the Unity CharacterController see
-            //https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/CharacterControllers.html#kinematic-character-controller
             if (raycastIsGrounded == false && characterController.isGrounded && isClimbingAnimation == false)
             {
                 //Create a ray pointing down world space
@@ -2127,7 +2103,6 @@ namespace Jinwoo.FirstPersonController
             return tr.TransformPoint(characterController.center);
         }
 
-        //World position of the collider ceil
         public Vector3 GetColliderCeilPosition()
         {
             return transform.TransformPoint(characterController.center + Vector3.up * characterController.height / 2);
@@ -2140,8 +2115,6 @@ namespace Jinwoo.FirstPersonController
 
         private Vector3 GetTransformOrigin()
         {
-            //If it's crouching/sliding the origin position will be at the base of the collider, if it's not it will be at the transform position.
-            //We add vertically 0.05f just to make sure to avoid the ray starting under ground in the case of the character being grounded
             return GetColliderBasePosition() + Vector3.up * 0.05f;
         }
 
@@ -2323,7 +2296,7 @@ namespace Jinwoo.FirstPersonController
                     if (grapplingLineSegmentsPositions == null)
                         grapplingLineSegmentsPositions = new Vector3[grapplingHookSettings.lineRendererSegmentCount + 1];
 
-                    //Animate the line renderer segments to simulate a rope
+
                     for (var i = 0; i < grapplingHookSettings.lineRendererSegmentCount + 1; i++)
                     {
                         var delta = i / (float)grapplingHookSettings.lineRendererSegmentCount;
@@ -2364,12 +2337,10 @@ namespace Jinwoo.FirstPersonController
                 grapplingLineHook = Instantiate(grapplingHookSettings.hookPrefab, grapplingLine.transform);
             }
 
-            //Reset the grappling line spring
             grapplingLineSpring.Reset();
             if (grapplingLine.positionCount > 0)
                 grapplingLine.positionCount = 0;
 
-            //Rotate the hook to look towards the direction it has been fired
             grapplingLineHook.transform.rotation = Quaternion.LookRotation((grapplingDestinationPoint.Value - grapplingCurrentPoint).normalized, Vector3.up);
 
             OnBeginGrapplingLine();
@@ -2384,8 +2355,6 @@ namespace Jinwoo.FirstPersonController
         {
             Vector3 direction = Vector3.zero;
 
-            //Calculate x and z movement. Projecting on plane guarantees the direction to be horizontal in relation to the character upward direction. 
-            //For example if the character was upside down this would guarantee it to still move accurately
             direction += Vector3.ProjectOnPlane(cameraTransform.right, tr.up).normalized * horizontal;
             direction += Vector3.ProjectOnPlane(cameraTransform.forward, tr.up).normalized * vertical;
             direction.y = 0;
@@ -2434,7 +2403,7 @@ namespace Jinwoo.FirstPersonController
 
         public static float SignedAngle360(Vector3 from, Vector3 to, Vector3 normal)
         {
-            float angle = Vector3.SignedAngle(from, to, normal); //Returns the angle between -180 and 180.
+            float angle = Vector3.SignedAngle(from, to, normal);
             if (angle < 0)
             {
                 angle = 360 - angle * -1;
