@@ -24143,7 +24143,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1400
+  m_Name: pb_Mesh-9092
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -26536,7 +26536,7 @@ MonoBehaviour:
     movementDeceleration: 0.05
     horizontalMaxSpeed: 30
   jumpSettings:
-    adaptiveJump: 1
+    adaptiveJump: 0
     jumpsCount: 1
     jumpForce: 8
     adaptiveJumpDuration: 0
