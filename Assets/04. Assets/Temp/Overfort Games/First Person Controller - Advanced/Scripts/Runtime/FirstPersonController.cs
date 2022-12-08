@@ -529,10 +529,6 @@ namespace Jinwoo.FirstPersonController
             isJumpButtonBeingPressed = characterInput.IsJumpButtonBeingPressed();
             isJumpButtonReleased = characterInput.IsJumpButtonReleased();
             isJumpButtonDown = characterInput.IsJumpButtonDown();
-            isRunButtonDoublePressedDown = characterInput.IsRunButtonDoublePressedDown();
-            isProneButtonBeingPressed = characterInput.IsProneButtonBeingPressed();
-            isProneButtonPressedDown = characterInput.IsProneButtonPressedDown();
-            isRunning = characterInput.IsRunButtonBeingPressed();
             isSliding = characterInput.IsSlideButtonBeingPressed();
             cameraHorizontal = cameraInput.GetHorizontal();
             cameraVertical = cameraInput.GetVertical();
@@ -619,26 +615,21 @@ namespace Jinwoo.FirstPersonController
             {
                 case ControllerState.Standing:
 
-                    //Standing ---> Grappling
                     if (isGrappled == true)
                     {
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
                         return ControllerState.Grappling;
                     }
 
-                    //Standing ---> InAir
                     if (isGrounded == false)
                     {
                         return ControllerState.InAir;
                     }
 
-                    //Standing ---> Sliding
                     if (enableSlide && enableRun && isRunning && IsSlidingButtonPressedDown() && isMorphingCollider == false && vertical > 0)
                     {
-                        //Morph the collider to slide height
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
 
-                        //Preset the momentum
                         SetMomentum(new Vector3(GetVelocity().x, 0, GetVelocity().z) + new Vector3(GetVelocity().x, 0, GetVelocity().z).normalized * slideSettings.initialForce);
 
                         if (callbacksEnabled)
@@ -647,7 +638,6 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Sliding;
                     }
 
-                    //Standing ---> Crouched
                     if (enableCrouch && IsSlidingButtonPressedDown() && isMorphingCollider == false)
                     {
                         SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
@@ -655,13 +645,11 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Crouched;
                     }
 
-                    //Standing ---> Tactical Sprint
                     if (isRunButtonDoublePressedDown && enableTacticalSprint)
                     {
                         return ControllerState.TacticalSprint;
                     }
 
-                    //Standing ---> Proned
                     if (isProneButtonPressedDown && enableProne && isMorphingCollider == false)
                     {
                         SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
@@ -685,13 +673,11 @@ namespace Jinwoo.FirstPersonController
                         }
                     }
 
-                    //InAir ---> Climb
                     if (enableClimb && CheckClimb())
                     {
                         return ControllerState.Climb;
                     }
 
-                    //InAir ---> Grappling
                     if (isGrappled == true)
                     {
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
@@ -701,15 +687,12 @@ namespace Jinwoo.FirstPersonController
                     if (enableSlide && IsSlidingButtonPressedDown())
                         wishToSlide = true;
 
-                    //InAir ---> Sliding 
                     if (enableSlide && isGrounded && wishToSlide && isMorphingCollider == false)
                     {
-                        //Preset momentum
                         SetMomentum(new Vector3(GetVelocity().x, 0, GetVelocity().z).normalized * runSettings.runSpeed);
 
                         wishToSlide = false;
 
-                        //Morph the collider to slide height
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
 
                         if (callbacksEnabled)
@@ -718,24 +701,20 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Sliding;
                     }
 
-                    //InAir ---> Standing
                     if (isGrounded && wishToSlide == false)
                     {
-                        //There is enough space for the character to be standing
                         if (IsColliderSpaceFree(defaultColliderHeight))
                         {
                             SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
                             return ControllerState.Standing;
                         }
 
-                        //There is enough space for the character to be crouched
                         if (IsColliderSpaceFree(crouchSettings.colliderHeight) && enableCrouch)
                         {
                             SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
                             return ControllerState.Crouched;
                         }
 
-                        //Minimum space limit supported state
                         if (enableProne)
                         {
                             SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
@@ -744,7 +723,6 @@ namespace Jinwoo.FirstPersonController
 
                     }
 
-                    //InAir ---> WallRun
                     if (enableWallRun)
                     {
                         Ray inAirWallRunRayCheckCenter = new Ray(GetColliderCenterPosition(), InputToMovementDirection());
@@ -755,7 +733,6 @@ namespace Jinwoo.FirstPersonController
 
                         float radius = 0.25f;
 
-                        //We are looking towards a wall and the wall climb cooldown is expired
                         if ((Physics.SphereCast(inAirWallRunRayCheckCenter, radius, out var inAirWallRunHit, wallRunSettings.attachMinDistanceCondition, wallRunSettings.walkableObjectLayerMask) ||
                             Physics.SphereCast(inAirWallRunRayCheckLeft, radius, out inAirWallRunHit, wallRunSettings.attachMinDistanceCondition, wallRunSettings.walkableObjectLayerMask) ||
                             Physics.SphereCast(inAirWallRunRayCheckRight, radius, out inAirWallRunHit, wallRunSettings.attachMinDistanceCondition, wallRunSettings.walkableObjectLayerMask)
@@ -764,7 +741,6 @@ namespace Jinwoo.FirstPersonController
                         {
                             float verticalForce = 0;
 
-                            //Give vertical force relative to the movement we had when we attached to the wall
                             if (movement.y > 0)
                             {
                                 verticalForce = wallRunSettings.attachVerticalBoostMax * movement.y / (jumpSettings.jumpForce * wallRunSettings.wallRunGravity / defaultGravityModifier / 2);
@@ -788,36 +764,30 @@ namespace Jinwoo.FirstPersonController
 
                 case ControllerState.TacticalSprint:
 
-                    //TacticalSprint ---> Grappling
                     if (isGrappled == true)
                     {
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
                         return ControllerState.Grappling;
                     }
 
-                    //TacticalSprint ---> InAir
                     if (isGrounded == false)
                     {
                         currentTacticalSprintTimer = 0;
                         return ControllerState.InAir;
                     }
 
-                    //TacticalSprint ---> Standing (duration over)
                     if (IsTacticalSprintDurationOver())
                     {
                         currentTacticalSprintTimer = 0;
                         return ControllerState.Standing;
                     }
 
-                    //TacticalSprint ---> Sliding
                     if (enableSlide && IsSlidingButtonPressedDown() && isMorphingCollider == false && vertical > 0)
                     {
                         currentTacticalSprintTimer = 0;
 
-                        //Morph the collider to slide height
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
 
-                        //Preset the momentum
                         SetMomentum(new Vector3(GetVelocity().x, 0, GetVelocity().z) + new Vector3(GetVelocity().x, 0, GetVelocity().z).normalized * slideSettings.initialForce);
 
                         if (callbacksEnabled)
@@ -826,12 +796,12 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Sliding;
                     }
 
-                    //TacticalSprint ---> Crouched
+                    
                     if (enableCrouch && IsSlidingButtonPressedDown() && isMorphingCollider == false)
                     {
                         currentTacticalSprintTimer = 0;
 
-                        //Morph the collider to crouch height
+                         
                         SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
 
                         return ControllerState.Crouched;
@@ -842,7 +812,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         currentTacticalSprintTimer = 0;
 
-                        //Morph the collider to prone height
                         SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
                         return ControllerState.Proned;
                     }
@@ -856,7 +825,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
 
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Grappling;
@@ -871,7 +839,6 @@ namespace Jinwoo.FirstPersonController
                     //Crouched ---> Standing
                     if (isGrounded == true && IsSlidingButtonPressedDown() && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Standing;
@@ -880,7 +847,6 @@ namespace Jinwoo.FirstPersonController
                     //Crouched ---> Standing (running)
                     if (isGrounded == true && enableRun && isRunning && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Standing;
@@ -889,7 +855,6 @@ namespace Jinwoo.FirstPersonController
                     //Crouched ---> Proned
                     if (isProneButtonPressedDown && enableProne && isMorphingCollider == false)
                     {
-                        //Morph the collider to prone height
                         SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
 
                         return ControllerState.Proned;
@@ -904,7 +869,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
 
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Grappling;
@@ -916,7 +880,6 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.InAir;
                     }
 
-                    //Proned ---> Standing (jumping or pressing the prone button)
                     if ((isProneButtonPressedDown || isJumpButtonDown) && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
@@ -1330,10 +1293,10 @@ namespace Jinwoo.FirstPersonController
                 Crosshair.SetCrosshairToDefaultColor();
             }
 
-            //Handle line movement
+   
             if (grapplingDestinationPoint != null)
             {
-                //If we have a target update the destination point for the line (in case of a moving target)
+                 
                 if (grapplingTarget != null)
                 {
                     grapplingDestinationPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1341,11 +1304,11 @@ namespace Jinwoo.FirstPersonController
 
                 OnGrapplingLine();
 
-                //The speed of the line is proportional to the distance from the destination point
+                 
                 grapplingLaunchTimer += dt * grapplingHookSettings.grapplingLaunchSpeed * (grapplingHookSettings.launchMaxDistance * grapplingHookSettings.launchMaxDistance / grapplingStartDistanceSqr);
                 grapplingCurrentPoint = Vector3.Lerp(GetGrapplingLineStartPosition(), grapplingDestinationPoint.Value, grapplingLaunchTimer);
 
-                //The line has reached the destination point
+                 
                 if ((grapplingCurrentPoint - grapplingDestinationPoint.Value).sqrMagnitude < 0.1f)
                 {
                     grapplingDirectionStart = (grapplingCurrentPoint - GetTransformOrigin()).normalized;
@@ -1357,7 +1320,7 @@ namespace Jinwoo.FirstPersonController
                         OnBeginGrappling();
                         isGrappled = true;
                     }
-                    else //We didn't have a target
+                    else  
                     {
                         OnEndFailedGrapplingLine();
                     }
@@ -1367,16 +1330,14 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //Handle grappled character movement
 
-            if (isGrappled == false) //We are not grappled yet
+            if (isGrappled == false)  
             {
                 grapplingCurrentDetachTimer = 0;
                 grapplingCurrentTimer = 0;
                 return;
             }
 
-            //Update the destination to follow the target (in case of a moving platform)
             if (grapplingTarget != null)
             {
                 grapplingCurrentPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1388,7 +1349,6 @@ namespace Jinwoo.FirstPersonController
 
             OnGrappling();
 
-            //If the current distance is below the threshold or the speed of the character exceed the limit, detach the character 
             if (grapplingCurrentDistance <= grapplingHookSettings.detachMinDistanceCondition 
                 || GetCurrentSpeedSqr() > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition 
                 || momentum.sqrMagnitude > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition)

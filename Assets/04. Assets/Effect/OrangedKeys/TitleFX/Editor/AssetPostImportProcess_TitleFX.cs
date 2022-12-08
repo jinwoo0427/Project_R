@@ -16,7 +16,7 @@ public class AssetPostImportProcess_TitleFX : AssetPostprocessor
         foreach (string item in importedAssets)
         {
             if (Path.GetFileName(item) == "AssetPostImportProcess_WallFX.cs") WelcomeWin = true;
-            Debug.Log(item);
+            //Debug.Log(item);
         }
 
 
@@ -28,7 +28,7 @@ public class AssetPostImportProcess_TitleFX : AssetPostprocessor
 
         if (WelcomeWin)
         {
-            Debug.Log("WALL FX PACK IMPORTED !!");
+            //Debug.Log("WALL FX PACK IMPORTED !!");
             TitleFX_Welcome.ShowWindow();
         }
 
