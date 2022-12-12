@@ -7,7 +7,12 @@ namespace Jinwoo.FirstPersonController
 {
     public class PlayerController : MonoBehaviour
     {
-        
+
+        public CharacterInput _input;
+
+        public PlayerMove _playerMove;
+
+        public Rigidbody rigid;
 
 
 
