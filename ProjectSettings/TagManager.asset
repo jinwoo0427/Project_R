@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ledge
   - Hookable
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - PostProcessing
   - Water
   - UI
-  - Arms
-  - Weapon
+  - Building
+  - Floor
   - Player
   - 
   - 

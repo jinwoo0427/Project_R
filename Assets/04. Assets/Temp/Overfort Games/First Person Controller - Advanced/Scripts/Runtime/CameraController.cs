@@ -84,7 +84,7 @@ namespace Jinwoo.FirstPersonController
 			//사용하기 편하게 캐싱한거
 			tr = transform;
 
-			bodyRoot = transform.GetComponentInParent<PlayerController>().transform;
+			bodyRoot = transform.GetComponentInParent<FirstPersonController>().transform;
 			target = cameraRoot;
 
 			controller = bodyRoot.GetComponent<FirstPersonController>();

@@ -68,7 +68,7 @@ namespace Lovatto.MiniMap
         public void DrawOnGUI(Rect fullArea)
         {
 
-            //EditorGUI.DrawRect(fullArea, new Color(1,0,0,0.33f));
+            EditorGUI.DrawRect(fullArea, new Color(1,0,0,0.33f));
             
             if (renderDivisions == RendersDivisions.Single)
             {

@@ -18,6 +18,6 @@ public class Debugger : MonoBehaviour
 
     private void ResetPosition()
     {
-        SceneManager.LoadScene("TestScene");
+        //SceneManager.LoadScene("TestScene");
     }
 }

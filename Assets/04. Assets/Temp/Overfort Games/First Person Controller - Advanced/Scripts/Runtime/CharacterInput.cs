@@ -22,23 +22,32 @@ namespace Jinwoo.FirstPersonController
 		private string jumpInputKey = "Jump";
 
 		[SerializeField]
+		private string runInputKey = "Run";
+
+		[SerializeField]
+		private string proneInputKey = "Prone";
+
+		[SerializeField]
 		private string hookInputKey = "Hook";
 
 		[SerializeField]
-		private string dashInputKey = "Dash";
+		private string zoomKey = "Zoom";
+
 
 		private float horizontalInput;
 		private float verticalInput;
 
+		private bool isRunButtonBeingPressed;
 		private bool isJumpButtonBeingPressed;
 		private bool isJumpButtonReleased;
 		private bool isJumpButtonDown;
 		private bool isSlideButtonBeingPressed;
+		private bool isProneButtonBeingPressed;
+		private bool isProneButtonPressedDown;
 		private bool isHookButtonDown;
-
-		private bool isDashButtonBeingPressed;
-		private bool isDashButtonDown;
-		private bool isDashButtonReleased;
+		private bool isRunButtonPressedDown;
+		private bool isRunButtonDoublePressedDown;
+		private bool isZoomButtonBeingPressed;
 
 		private float lastTimeRunButtonBeingPressed;
 		private float minimumTimerForDoublePress = 0.5f;
@@ -59,19 +68,37 @@ namespace Jinwoo.FirstPersonController
 				verticalInput = Input.GetAxis(verticalInputKey);
 			}
 
+			isRunButtonPressedDown = Input.GetButtonDown(runInputKey);
+			isRunButtonBeingPressed = Input.GetButton(runInputKey);
 
 			isJumpButtonBeingPressed = Input.GetButton(jumpInputKey);
 			isJumpButtonReleased = Input.GetButtonUp(jumpInputKey);
 			isJumpButtonDown = Input.GetButtonDown(jumpInputKey);
 
-			isDashButtonBeingPressed = Input.GetButton(dashInputKey);
-			isDashButtonDown = Input.GetButtonDown(dashInputKey);
-			isDashButtonReleased = Input.GetButtonUp(dashInputKey);
-
 			isSlideButtonBeingPressed = Input.GetButton(slideInputKey);
+
+			isProneButtonBeingPressed = Input.GetButton(proneInputKey);
+			isProneButtonPressedDown = Input.GetButtonDown(proneInputKey);
 
 			isHookButtonDown = Input.GetButtonDown(hookInputKey);
 
+			isZoomButtonBeingPressed = Input.GetButton(zoomKey);
+
+			if (isRunButtonPressedDown)
+			{
+				if (lastTimeRunButtonBeingPressed + minimumTimerForDoublePress > Time.time)
+				{
+					isRunButtonDoublePressedDown = true;
+				}
+
+				lastTimeRunButtonBeingPressed = Time.time;
+			}
+		}
+
+		private void LateUpdate()
+		{
+			//업다운 인풋 리셋
+			isRunButtonDoublePressedDown = false;
 		}
 
 		public float GetHorizontalMovementInput()
@@ -99,28 +126,45 @@ namespace Jinwoo.FirstPersonController
 			return isJumpButtonDown;
 		}
 
+		public bool IsZoomButtonBeingPressed()
+		{
+			return isZoomButtonBeingPressed;
+		}
+		public bool IsRunButtonBeingPressed()
+		{
+			return isRunButtonBeingPressed;
+		}
+
+		public bool IsRunButtonDoublePressedDown()
+		{
+			return isRunButtonDoublePressedDown;
+		}
+
+		public bool IsProneButtonBeingPressed()
+		{
+			return isProneButtonBeingPressed;
+		}
+		public bool IsProneButtonPressedDown()
+		{
+			return isProneButtonPressedDown;
+		}
+
+		public bool IsRunButtonPressedDown()
+		{
+			return isRunButtonPressedDown;
+		}
+
 		public bool IsSlideButtonBeingPressed()
 		{
 			return isSlideButtonBeingPressed;
 		}
 
+
 		public bool IsHookButtonDown()
 		{
 			return isHookButtonDown;
 		}
-		public bool IsDashButtonBeingPressed()
-		{
-			return isDashButtonBeingPressed;
-		}
-		public bool IsDashButtonDown()
-        {
-			return isDashButtonDown;
-        }
 
-		public bool IsDashButtonReleased()
-        {
-			return isDashButtonReleased;
-        }
 		#endregion
 	}
 }
