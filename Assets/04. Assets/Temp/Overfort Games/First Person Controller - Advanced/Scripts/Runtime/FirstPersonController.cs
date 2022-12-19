@@ -1638,14 +1638,12 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //Clamp maximum vertical speed
             if (movement.y > jumpSettings.verticalMaxSpeed)
                 movement.y = jumpSettings.verticalMaxSpeed;
         }
 
         private void HandleGravityModifier()
         {
-            //Modify gravity while wall running
             if (currentControllerState == ControllerState.WallRun)
             {
                 if (InputToMovementDirection().sqrMagnitude > 0.01f)
@@ -1668,14 +1666,12 @@ namespace Jinwoo.FirstPersonController
             if (currentControllerState == ControllerState.Grappling)
                 return;
 
-            //Add gravity only if not grounded
             if (isGrounded == false)
             {
                 movement.y -= -Physics.gravity.y * gravityModifier * dt;
             }
             else
             {
-                //If grounded and not trying to jump reset movement y to a arbitrary value
                 if (isTryingToJump == false)
                     movement.y = -0.1f;
             }
@@ -1693,20 +1689,19 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.Sliding)
             {
-                //Calculate the direction the slope is direct to 
                 Vector3 slideDirection = Vector3.ProjectOnPlane(-tr.up, currentGroundNormal).normalized;
 
-                //Calculate character forward direction projected on the ground
+                //지면에 투영된 캐릭터의 전방 방향 계산
                 Vector3 groundDirection = Vector3.ProjectOnPlane(cameraTransform.forward, currentGroundNormal).normalized;
 
-                //We are sliding on a slope
+                //sliding on a slope
                 if (slideDirection.x < 0 || slideDirection.z < 0)
                 {
                     momentum += slideDirection * dt * dt * slideSettings.slideGravity;
                 }
                 else
                 {
-                    //We are not in a slope, slow down the momentum using 'slideFriction' value
+                    //우리는 경사면에 있지 않음 'slideFriction' 값을 사용하여 모멘텀을 늦춤.
                     momentum = IncrementVectorTowardTargetVector(momentum, slideSettings.groundFriction, dt, Vector3.zero);
 
                     momentum = IncrementVectorTowardTargetVector(momentum, Vector3.Angle(momentum.normalized, groundDirection) * slideSettings.cameraRotationFrictionFactor, dt, Vector3.zero);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sliding : MonoBehaviour
+public class SlidingSettings : MonoBehaviour
 {
     [Tooltip("슬라이딩이 시작될 때 적용되는 초기 힘")]
     public float initialForce = 20;
@@ -26,7 +26,4 @@ public class Sliding : MonoBehaviour
     public float cameraRotationFrictionFactor = 0.1f;
 
     public float colliderMorphSpeed = 10;
-
-
-
 }

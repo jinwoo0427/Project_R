@@ -2,20 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
-namespace Jinwoo.FirstPersonController
+using Jinwoo.FirstPersonController;
+public class PlayerController : MonoBehaviour
 {
-    public class PlayerController : MonoBehaviour
-    {
 
-        public CharacterInput _input;
+    public CharacterInput _input;
 
-        public PlayerMove _playerMove;
+    public PlayerMove _playerMove;
 
-        public Rigidbody rigid;
-
-
-
-    }
+    public Rigidbody rigid;
 
 }
+
