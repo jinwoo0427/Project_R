@@ -322,7 +322,8 @@ MonoBehaviour:
   - {fileID: -4925701706118992166}
   - {fileID: -2702841589076663972}
   - {fileID: -6923629880953611587}
-  m_RendererFeatureMap: 
+  - {fileID: 6954567922489397815}
+  m_RendererFeatureMap: 37924ebaad968360
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -549,6 +550,23 @@ MonoBehaviour:
     injectionPoint: 550
     alwaysEnable: 0
     cameraTypes: 5
+--- !u!114 &6954567922489397815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22e2c48a7d06a340a43c592c748aae0, type: 3}
+  m_Name: OverlayRenderer
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    injectionPoint: 550
+    alwaysEnable: 0
+    cameraTypes: 6
 --- !u!114 &7370877807451705240
 MonoBehaviour:
   m_ObjectHideFlags: 0
