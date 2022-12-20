@@ -78,7 +78,7 @@ namespace Jinwoo.FirstPersonController
 
         [Space(5), Header("Misc"), Space(5)]
 
-        [Tooltip("Layer mask for detecting obstacle above the character")]
+        [Tooltip("캐릭터 위의 장애물을 감지하기 위한 레이어 마스크")]
 
         public LayerMask ceilingDetectionLayerMask;
 
@@ -89,7 +89,7 @@ namespace Jinwoo.FirstPersonController
         public float defaultColliderMorphSpeed = 10;
 
 
-        [Tooltip("The default gravity in the physics settings will be multiplied by this value")]
+        [Tooltip("물리 설정의 기본 중력에 이 값을 곱함")]
         public float gravityModifier = 2;
 
         [Space(5), Header("Settings"), Space(5)]
@@ -99,14 +99,14 @@ namespace Jinwoo.FirstPersonController
         [System.Serializable]
         public class HorizontalSpeedSettings
         {
-            [Tooltip("Default walking speed")]
+            [Tooltip("기본 보행 속도")]
             public float defaultSpeed = 5;
 
             public float backwardsSpeed = 4.5f;
 
             [Header("Advanced")]
 
-            [Tooltip("Speed deceleration amount when the character stops. A value 0 means no deceleration")]
+            [Tooltip("캐릭터 정지 시 속도 감속량입니다. 값 0은 감속 없음을 의미")]
             public float movementDeceleration = 0.033f;
 
             public float horizontalMaxSpeed = 30;
@@ -120,7 +120,7 @@ namespace Jinwoo.FirstPersonController
         [System.Serializable]
         public class JumpSettings
         {
-            [Tooltip("Set the jump as adaptive. The more the player will press the jump button the higher the character will go")]
+            [Tooltip("점프를 적응형으로 설정. 플레이어가 점프 버튼을 더 많이 누를수록 캐릭터가 더 높이 올라감")]
             public bool adaptiveJump = false;
 
             public int jumpsCount = 1;
@@ -128,16 +128,16 @@ namespace Jinwoo.FirstPersonController
             public float jumpForce = 10;
             
             [Header("Advanced")]
-            [Tooltip("Maximum jump button press duration for the adaptive jump")]
+            [Tooltip("어댑티브 점프에 대한 최대 점프 버튼 누름 시간")]
             public float adaptiveJumpDuration = 0;
 
-            [Tooltip("This is the time the character has for beginning a jump when not grounded")]
+            [Tooltip("캐릭터가 접지되지 않은 상태에서 점프를 시작하는 데 필요한 시간")]
             public float coyoteTime = 0.15f;
 
             [Range(0, 1)]
             public float airControl = 0.5f;
 
-            [Tooltip("When this value is higher than 0 the character will lose momentum while in the air")]
+            [Tooltip("이 값이 0보다 크면 캐릭터는 공중에 있는 동안 추진력을 잃게 됨")]
             public float airMomentumFriction = 2;
 
             public float verticalMaxSpeed = 50f;
@@ -207,28 +207,28 @@ namespace Jinwoo.FirstPersonController
         [System.Serializable]
         public class ClimbSettings
         {
-            [Tooltip("Maximum climb time duration in seconds")]
+            [Tooltip("최대 상승 시간(초)")]
             public float maxDuration = 2;
 
-            [Tooltip("The climb time duration is dynamic. The maximum time duration will occur when the character is this distance away from the climb end position")]
+            [Tooltip("상승 시간 지속 시간은 동적. 캐릭터가 등반 종료 위치에서 이 거리만큼 떨어져 있을 때 최대 지속 시간이 발생.")]
             public float durationMaxDistance = 3;
 
-            [Tooltip("How high you can climb objects")]
+            [Tooltip("물체를 오를 수 있는 높이")]
             public float maxHeight = 2.5f;
 
             [Header("Advanced")]
 
-            [Tooltip("The value of this curve will be multiplied to the lerp time of the climb animation. A linear curve will result in the character moving from begin point to end point at the same speed")]
+            [Tooltip("이 곡선의 값은 등반 애니메이션의 lerp 시간에 곱함. 선형 곡선은 캐릭터가 시작점에서 끝점까지 동일한 속도로 이동")]
             public AnimationCurve animationSpeedCurve;
 
             public LayerMask climbableObjectLayerMask;
 
-            [Tooltip("Maximum distance from a climbable object in order to trigger the climb animation")]
+            [Tooltip("오르기 애니메이션을 트리거하기 위해 오르기 가능한 물체로부터의 최대 거리")]
             public float maxDistanceFromClimbableObject = 0.8f;
 
             public float cameraInclinationIntensity = 800;
 
-            [Tooltip("This curve represents the speed of the camera pitch during the climb animation. The value of this curve will be multiplied to cameraInclinationSpeed")]
+            [Tooltip("이 곡선은 등반 애니메이션 중 카메라 피치의 속도를 나타냄. 이 곡선의 값은 cameraInclinationSpeed에 곱해짐.")]
             public AnimationCurve cameraInclinationIntensityCurve;
 
         }
@@ -241,7 +241,7 @@ namespace Jinwoo.FirstPersonController
         [System.Serializable]
         public class SlideSettings
         {
-            [Tooltip("Initial force applied when sliding begins")]
+            [Tooltip("슬라이딩이 시작될 때 적용되는 초기 힘")]
             public float initialForce = 20;
 
             public float groundFriction = 15;
@@ -250,16 +250,16 @@ namespace Jinwoo.FirstPersonController
 
             [Header("Advanced")]
 
-            [Tooltip("Gravity-like force applied when sliding")]
+            [Tooltip("미끄러질 때 중력과 같은 힘이 가해짐")]
             public float slideGravity = 400;
 
-            [Tooltip("Minimum force the character has to have for sliding (Squared)")]
+            [Tooltip("캐릭터가 미끄러지기 위해 가져야 하는 최소 힘(제곱)")]
             public float minimumStopVelocity = 5;
 
             [Range(0, 1)]
             public float horizontalControl = 0.5f;
 
-            [Tooltip("Friction applied when the camera looks in a different direction the character is moving")]
+            [Tooltip("카메라가 캐릭터가 움직이는 다른 방향을 바라볼 때 적용되는 마찰")]
             public float cameraRotationFrictionFactor = 0.1f;
 
             public float colliderMorphSpeed = 10;
@@ -275,10 +275,10 @@ namespace Jinwoo.FirstPersonController
         [System.Serializable]
         public class GrapplingHookSettings
         {
-            [Tooltip("The cooldown starts when the character launches the hook, whether it hits a target or not")]
+            [Tooltip("재사용 대기시간은 캐릭터가 훅을 발사할 때 시작")]
             public float cooldown = 3f;
 
-            [Tooltip("Speed of the character while grappled")]
+            [Tooltip("그래플링 중 캐릭터의 속도")]
             public float speedWhileHooked = 50;
 
             public float launchMaxDistance = 22;
@@ -291,20 +291,20 @@ namespace Jinwoo.FirstPersonController
 
             public float horizontalControlStrength = 10f;
 
-            [Tooltip("While grappled, the character will detach if it exceeds this speed")]
+            [Tooltip("붙잡힌 상태에서 이 속도를 초과하면 캐릭터가 분리됩니다.")]
             public float detachSpeedLimitCondition = 27;
 
-            [Tooltip("To extend this angle condition use 'detachTimerCondition'")]
+            [Tooltip("이 각도 조건을 확장하려면 'detachTimerCondition'을 사용하삼'")]
             [Range(0,90)]
             public float detachAngleCondition = 90;
 
-            [Tooltip("This timer starts when the angle from the attach position > 'detachAngleCondition'. This can be useful in order to make the character rotate around objects while grappled")]
+            [Tooltip("이 타이머는 연결 위치의 각도 > 'detachAngleCondition'일 때 시작됨. 이는 캐릭터가 그래플하는 동안 물체 주위를 회전하도록 만드는 데 유용할 수 있움.")]
             public float detachTimerCondition = 0.3f;
 
-            [Tooltip("While grappled, the character will detach if it reaches the destination point within this distance")]
+            [Tooltip("붙잡힌 상태에서 이 거리 내에서 목표 지점에 도달하면 캐릭터가 분리됨")]
             public float detachMinDistanceCondition = 3.25f;
 
-            [Tooltip("Vertical force applied to the character when the grappling get attached to a target")]
+            [Tooltip("그래플링이 대상에 부착될 때 캐릭터에 적용되는 수직력")]
             public float initialVerticalForce = 1;
 
             public LayerMask hookableObjectLayerMask;
@@ -319,7 +319,7 @@ namespace Jinwoo.FirstPersonController
 
             public float lineRendererWidth = 0.05f;
 
-            [Tooltip("Controls the quality of the grappling line")]
+            [Tooltip("그래플링 라인의 품질을 제어")]
             public int lineRendererSegmentCount = 100;
 
             public float lineRendererWaveStiffness = 800;
@@ -348,36 +348,36 @@ namespace Jinwoo.FirstPersonController
             [Header("Advanced")]
             public LayerMask walkableObjectLayerMask;
 
-            [Tooltip("The character will automatically detach from the wall after this amount of time")]
+            [Tooltip("캐릭터는 이 시간이 지나면 자동으로 벽에서 분리됨")]
             public float autoDetachTimerCondition = 1;
 
-            [Tooltip("After being auto detached the character will receive this force inverse to the wall direction")]
+            [Tooltip("자동 분리된 후 캐릭터는 벽 방향과 반대 방향으로 이 힘을 받게 됨")]
             public float autoDetachForce = 2;
 
-            [Tooltip("Once detached from the wall, the character cannot attach again for this amount of time (in seconds)")]
+            [Tooltip("벽에서 분리되면 캐릭터는 이 시간(초) 동안 다시 부착할 수 없슴")]
             public float cooldown = 1.5f;
 
-            [Tooltip("Gravity while attached to the wall")]
+            [Tooltip("벽에 붙어있는 동안의 중력")]
             public float wallRunGravity = 0.5f;
 
-            [Tooltip("Gravity while attached to the wall and moving")]
+            [Tooltip("벽에 부착되어 이동하는 동안의 중력")]
             public float wallRunGravityWhileMoving = 0.35f;
 
-            [Tooltip("Min vertical boost force received when attaching to the wall. This vertical force depends on the amount of vertical movement the character had while hitting the wall")]
+            [Tooltip("벽에 부착할 때 받는 최소 수직 부스트 힘. 이 수직력은 캐릭터가 벽에 부딪히는 동안 수직 이동의 양에 따라 달라짐.")]
             public float attachVerticalBoostMin = 2.5f;
 
-            [Tooltip("Max vertical boost force received when attaching to the wall. This vertical force depends on the amount of vertical movement the character had while hitting the wall")]
+            [Tooltip("벽에 부착할 때 받는 최대 수직 부스트 힘. 이 수직력은 캐릭터가 벽에 부딪히는 동안 수직 이동의 양에 따라 달라짐")]
             public float attachVerticalBoostMax = 5;
 
-            [Tooltip("Minimum distance from wall in order to trigger wall run")]
+            [Tooltip("월 런을 트리거하기 위한 벽과의 최소 거리")]
             public float attachMinDistanceCondition = 0.35f;
 
-            [Tooltip("The character will detect walls on its side relative to this angle")]
+            [Tooltip("캐릭터는 이 각도를 기준으로 측면의 벽을 감지")]
             public float attachSideAngleCondition = 20;
 
-            [Tooltip("Whether the camera tilt lerp value target changes depending on the angle relative to the character forward direction to the wall. " +
-                "If this variable is NOT checked The camera tilt value target is fixed. Rotation value of 0 if the character is looking at the wall within 20 degrees, " +
-                "cameraTiltAngle if the character is looking away from the wall")]
+            [Tooltip("캐릭터가 벽을 향하는 방향에 대한 각도에 따라 카메라 틸트 lerp 값 대상이 변경되는지 여부임. " +
+                "이 변수를 체크하지 않으면 카메라 기울기 값 대상이 고정됨. 캐릭터가 20도 이내에서 벽을 바라보고 있는 경우 회전 값은 0, " +
+                "cameraTiltAngle 캐릭터가 벽에서 멀어지는 경우")]
             public bool dynamicCameraTilt = true;
 
             public float cameraTiltAngle = 15;
@@ -635,10 +635,10 @@ namespace Jinwoo.FirstPersonController
                     //Standing ---> Sliding
                     if (enableSlide && enableRun && isRunning && IsSlidingButtonPressedDown() && isMorphingCollider == false && vertical > 0)
                     {
-                        //Morph the collider to slide height
+                        //충돌체를 슬라이드 높이로 모핑
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
 
-                        //Preset the momentum
+                        //Momentum을 미리 설정
                         SetMomentum(new Vector3(GetVelocity().x, 0, GetVelocity().z) + new Vector3(GetVelocity().x, 0, GetVelocity().z).normalized * slideSettings.initialForce);
 
                         if (callbacksEnabled)
@@ -704,12 +704,10 @@ namespace Jinwoo.FirstPersonController
                     //InAir ---> Sliding 
                     if (enableSlide && isGrounded && wishToSlide && isMorphingCollider == false)
                     {
-                        //Preset momentum
                         SetMomentum(new Vector3(GetVelocity().x, 0, GetVelocity().z).normalized * runSettings.runSpeed);
 
                         wishToSlide = false;
 
-                        //Morph the collider to slide height
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
 
                         if (callbacksEnabled)
@@ -721,21 +719,21 @@ namespace Jinwoo.FirstPersonController
                     //InAir ---> Standing
                     if (isGrounded && wishToSlide == false)
                     {
-                        //There is enough space for the character to be standing
+                        //캐릭터가 서 있을 수 있는 충분한 공간이 있음
                         if (IsColliderSpaceFree(defaultColliderHeight))
                         {
                             SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
                             return ControllerState.Standing;
                         }
 
-                        //There is enough space for the character to be crouched
+                        //캐릭터가 웅크릴 수 있는 충분한 공간이 있음
                         if (IsColliderSpaceFree(crouchSettings.colliderHeight) && enableCrouch)
                         {
                             SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
                             return ControllerState.Crouched;
                         }
 
-                        //Minimum space limit supported state
+                        //최소 공간 제한 지원 상태
                         if (enableProne)
                         {
                             SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
@@ -755,7 +753,7 @@ namespace Jinwoo.FirstPersonController
 
                         float radius = 0.25f;
 
-                        //We are looking towards a wall and the wall climb cooldown is expired
+                        //벽을 바라보고 있으며 벽 오르기 쿨다운이 만료됨
                         if ((Physics.SphereCast(inAirWallRunRayCheckCenter, radius, out var inAirWallRunHit, wallRunSettings.attachMinDistanceCondition, wallRunSettings.walkableObjectLayerMask) ||
                             Physics.SphereCast(inAirWallRunRayCheckLeft, radius, out inAirWallRunHit, wallRunSettings.attachMinDistanceCondition, wallRunSettings.walkableObjectLayerMask) ||
                             Physics.SphereCast(inAirWallRunRayCheckRight, radius, out inAirWallRunHit, wallRunSettings.attachMinDistanceCondition, wallRunSettings.walkableObjectLayerMask)
@@ -764,7 +762,7 @@ namespace Jinwoo.FirstPersonController
                         {
                             float verticalForce = 0;
 
-                            //Give vertical force relative to the movement we had when we attached to the wall
+                            //벽에 부착했을 때의 움직임에 상대적인 수직력을 부여함
                             if (movement.y > 0)
                             {
                                 verticalForce = wallRunSettings.attachVerticalBoostMax * movement.y / (jumpSettings.jumpForce * wallRunSettings.wallRunGravity / defaultGravityModifier / 2);
@@ -814,10 +812,8 @@ namespace Jinwoo.FirstPersonController
                     {
                         currentTacticalSprintTimer = 0;
 
-                        //Morph the collider to slide height
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
 
-                        //Preset the momentum
                         SetMomentum(new Vector3(GetVelocity().x, 0, GetVelocity().z) + new Vector3(GetVelocity().x, 0, GetVelocity().z).normalized * slideSettings.initialForce);
 
                         if (callbacksEnabled)
@@ -831,7 +827,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         currentTacticalSprintTimer = 0;
 
-                        //Morph the collider to crouch height
                         SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
 
                         return ControllerState.Crouched;
@@ -842,7 +837,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         currentTacticalSprintTimer = 0;
 
-                        //Morph the collider to prone height
                         SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
                         return ControllerState.Proned;
                     }
@@ -856,7 +850,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
 
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Grappling;
@@ -871,7 +864,6 @@ namespace Jinwoo.FirstPersonController
                     //Crouched ---> Standing
                     if (isGrounded == true && IsSlidingButtonPressedDown() && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Standing;
@@ -880,7 +872,6 @@ namespace Jinwoo.FirstPersonController
                     //Crouched ---> Standing (running)
                     if (isGrounded == true && enableRun && isRunning && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Standing;
@@ -889,7 +880,6 @@ namespace Jinwoo.FirstPersonController
                     //Crouched ---> Proned
                     if (isProneButtonPressedDown && enableProne && isMorphingCollider == false)
                     {
-                        //Morph the collider to prone height
                         SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
 
                         return ControllerState.Proned;
@@ -904,7 +894,6 @@ namespace Jinwoo.FirstPersonController
                     {
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
 
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Grappling;
@@ -916,7 +905,7 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.InAir;
                     }
 
-                    //Proned ---> Standing (jumping or pressing the prone button)
+                    //Proned ---> Standing (점프 또는 엎드림 버튼 누르기)
                     if ((isProneButtonPressedDown || isJumpButtonDown) && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
@@ -926,7 +915,6 @@ namespace Jinwoo.FirstPersonController
                     //Proned ---> Crouched
                     if (enableCrouch && IsSlidingButtonPressedDown() && isMorphingCollider == false && IsColliderSpaceFree(crouchSettings.colliderHeight))
                     {
-                        //Morph the collider to crouch height
                         SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
 
                         return ControllerState.Crouched;
@@ -944,22 +932,20 @@ namespace Jinwoo.FirstPersonController
 
                         AddMomentum(tr.up * grapplingHookSettings.initialVerticalForce);
 
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Grappling;
                     }
 
-                    //Sliding ---> Standing (minimum stop velocity)
+                    //Sliding ---> Standing (최소 정지 속도)
                     if (GetVelocity().sqrMagnitude < slideSettings.minimumStopVelocity * slideSettings.minimumStopVelocity && isMorphingCollider == false)
                     {
-                        //Reset the momentum
                         SetMomentum(Vector3.zero);
 
                         if (callbacksEnabled)
                             OnEndSlide();
 
-                        //There is enough space for the character to be standing
+                        //캐릭터가 서 있을 수 있는 충분한 공간이 있음
                         if (IsColliderSpaceFree(defaultColliderHeight))
                         {
                             SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
@@ -967,7 +953,7 @@ namespace Jinwoo.FirstPersonController
                             return ControllerState.Standing;
                         }
 
-                        //There is enough space for the character to be crouched
+                        //캐릭터가 웅크릴 수 있는 충분한 공간이 있음
                         if (IsColliderSpaceFree(crouchSettings.colliderHeight) && enableCrouch)
                         {
                             SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
@@ -975,7 +961,7 @@ namespace Jinwoo.FirstPersonController
                             return ControllerState.Crouched;
                         }
 
-                        //Minimum space limit supported state
+                        //최소 공간 제한 지원 상태
                         if (enableProne)
                         {
                             SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
@@ -993,22 +979,20 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.InAir;
                     }
 
-                    //Sliding ---> Standing (stop sliding by re-pressing the slide button)
+                    //Sliding ---> Standing (슬라이드 버튼을 다시 눌러 슬라이딩 중지)
                     if (IsSlidingButtonPressedDown() && isMorphingCollider == false && IsColliderSpaceFree(defaultColliderHeight))
                     {
-                        //Reset momentum
                         SetMomentum(Vector3.zero);
 
                         if (callbacksEnabled)
                             OnEndSlide();
 
-                        //Morph the collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
 
                         return ControllerState.Standing;
                     }
 
-                    //OnSlide per update callback
+                    //업데이트 콜백당 OnSlide
                     if (callbacksEnabled && isGrounded)
                         OnSlide();
 
@@ -1025,27 +1009,24 @@ namespace Jinwoo.FirstPersonController
 
                 case ControllerState.Climb:
 
-                    //Climb ---> Standing (climb animation has ended)
+                    //Climb ---> Standing 
                     if (isClimbingAnimation == false)
                     {
                         if (colliderLandingMorph)
                         {
 
-                            //There is enough space for the character to be standing
                             if (IsColliderSpaceFree(defaultColliderHeight))
                             {
                                 SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
                                 return ControllerState.Standing;
                             }
 
-                            //There is enough space for the character to be crouched
                             if (IsColliderSpaceFree(crouchSettings.colliderHeight) && enableCrouch)
                             {
                                 SetColliderHeightAutoLerp(crouchSettings.colliderHeight, crouchSettings.colliderMorphSpeed);
                                 return ControllerState.Crouched;
                             }
 
-                            //Minimum space limit supported state
                             if (enableProne)
                             {
                                 SetColliderHeightAutoLerp(proneSettings.colliderHeight, proneSettings.colliderMorphSpeed);
@@ -1065,7 +1046,7 @@ namespace Jinwoo.FirstPersonController
 
                 case ControllerState.Grappling:
 
-                    //Set collider height to inAirHeight while grappling
+                    //그래플링하는 동안 콜라이더 높이를 inAirHeight로 설정
                     if (characterController.height > jumpSettings.inAirColliderHeight)
                     {
                         StopColliderHeightAutoLerp();
@@ -1152,7 +1133,7 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Standing;
                     }
 
-                    //Wallrun ---> Standing (no walls hit)
+                    //Wallrun ---> Standing (벽에 부딪히지 않음)
                     Vector3 previousWallRunNormal = currentWallRunNormal;
                     Vector3 previousWallRunDirection = currentWallRunDirection;
                     if (CheckWallRunRaycast(bodyTransform.right, out var wallRunRay, out var hitWall) ||
@@ -1161,12 +1142,12 @@ namespace Jinwoo.FirstPersonController
                         CheckWallRunRaycast(-bodyTransform.forward, out wallRunRay, out hitWall))
                     {
 
-                        //Gather wall direction and normal
+                        //벽 방향 및 법선 수집
                         currentWallRunDirection = wallRunRay.direction;
                         currentWallRunNormal = hitWall.normal;
 
                     }
-                    else //No walls was hit
+                    else //어떤 벽도 부딪치지 않음
                     {
                         currentWallRunDirection = Vector3.zero;
 
@@ -1175,13 +1156,12 @@ namespace Jinwoo.FirstPersonController
                             OnEndWallRun();
                         }
 
-                        //Morph collider to standing height
                         SetColliderHeightAutoLerp(defaultColliderHeight, defaultColliderMorphSpeed);
                         return ControllerState.Standing;
                     }
 
 
-                    //WallRun ---> Standing (going around a corner)
+                    //WallRun ---> Standing 
                     float angleFromPreviousFrame = Vector3.Angle(previousWallRunNormal, currentWallRunNormal);
                     if (previousWallRunDirection != Vector3.zero && angleFromPreviousFrame > 20)
                     {
@@ -1196,7 +1176,7 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Standing;
                     }
 
-                    //WallRun ---> Standing (looking at opposite direction from wall)
+                    //WallRun ---> Standing (벽에서 반대 방향을 바라봄)
                     if (previousWallRunDirection != Vector3.zero && Vector3.Dot(currentWallRunDirection, InputToMovementDirection()) < -0.6)
                     {
                         currentWallRunDirection = Vector3.zero;
@@ -1210,7 +1190,7 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.Standing;
                     }
 
-                    //Wallrun ---> InAir (wall run jump)
+                    //Wallrun ---> InAir (월런 점프)
                     if (isJumpButtonDown)
                     {
                         SetMomentum(Vector3.ClampMagnitude(-currentWallRunDirection * wallRunSettings.horizontalWallJumpForce + Vector3.up * wallRunSettings.verticalWallJumpForce + velocity, wallRunSettings.speedWhileRunning));
@@ -1224,7 +1204,7 @@ namespace Jinwoo.FirstPersonController
                         return ControllerState.InAir;
                     }
 
-                    //Keep in mind this callback gets called each determination of controller state (each frame)
+                    //이 콜백은 컨트롤러 상태가 결정될 때마다(각 프레임) 호출됨
                     if (callbacksEnabled)
                     {
                         OnWallRun();
@@ -1239,14 +1219,14 @@ namespace Jinwoo.FirstPersonController
 
         private void HandleClimb(float dt)
         {
-            //We are not climbing
+            //클라이밍 할 수 없음
             if (enableClimb == false || currentControllerState != ControllerState.Climb)
                 return;
 
-            //Begin climb animation
+            //클라이밍 애니메이션 시작
             if (isClimbingAnimation == false)
             {
-                //Reset any movement
+                
                 SetMomentum(Vector3.zero);
                 movement = Vector3.zero;
 
@@ -1256,7 +1236,7 @@ namespace Jinwoo.FirstPersonController
             }
             else
             {
-                //Climbing animation in progress
+                //클라이밍 애니메이션 진행 중
                 if (climbTimer < 1)
                 {
                     //카메라를 피치. 회전량은 cameraInclinationSpeedCurve에 의해 결정
@@ -1267,15 +1247,15 @@ namespace Jinwoo.FirstPersonController
                     cameraController.AddCameraPitch(cameraPitchAmount);
                     climbTimer += dt / climbDuration;
 
-                    //Get custom climbing curve value
+                    //맞춤형 클라이밍 곡선 값 얻기
                     float lerpValue = climbSettings.animationSpeedCurve.Evaluate(climbTimer);
 
                     climbEndPoint = climbTarget.TransformPoint(climbEndPointRelativeToTarget);
 
-                    //Move the character from the start point to the end point
+                    //캐릭터를 시작점에서 끝점으로 이동
                     Teleport(Vector3.Lerp(climbStartPoint, climbEndPoint, Mathf.Min(lerpValue, 1)));
                 }
-                else //Climbing animation has ended
+                else //클라이밍 애니메이션이 종료
                 {
                     //Reset
                     climbTimer = 0;
@@ -1287,36 +1267,36 @@ namespace Jinwoo.FirstPersonController
 
         private void HandleGrappling(float dt)
         {
-            //Grappling is not enabled
+            //그래플링 활성화 안됨
             if (enableGrapplingHook == false)
                 return;
 
-            //Handle launching the line
+            //라인 시작 핸들
             if (IsGrapplingOnCooldown() == false)
             {
-                //Get ray from camera direction
+                //카메라 방향에서 광선을 얻음
                 Ray ray = cameraController.GetCamera().ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-                //The character is in range of hitting something
+                //캐릭터가 무언가를 치는 범위에 있음
                 if (Physics.Raycast(ray, out var hit, grapplingHookSettings.launchMaxDistance, grapplingHookSettings.hookableObjectLayerMask))
                 {
                     Crosshair.SetCrosshairColor(grapplingHookSettings.crosshairColor);
 
-                    //The player has hit the hook button
+                    //플레이어가 훅 버튼을 누름
                     if (characterInput.IsHookButtonDown())
                     {
                         GrapplingLineBegin(hit.point);
                         grapplingTarget = hit.collider.transform;
 
-                        //Set the relative position from the target hit by the hook (in case the target is a moving platform)
+                        //훅에 맞은 대상과의 상대 위치 설정(대상이 움직이는 발판인 경우)
                         grapplingDestinationPointTargetLocalPosition = grapplingTarget.InverseTransformPoint(hit.point);
                     }
                 }
-                else //The character is not in range of hitting something. The rope will be launched anyway but the character will not move
+                else //캐릭터가 무언가를 치는 범위에 있지 않음. 어쨌든 로프는 발사되지만 캐릭터는 움직이지 않음
                 {
                     Crosshair.SetCrosshairToDefaultColor();
 
-                    //The player has hit the hook button
+                    //플레이어가 훅 버튼을 누름.
                     if (characterInput.IsHookButtonDown())
                     {
                         GrapplingLineBegin(ray.origin + ray.direction * grapplingHookSettings.launchMaxDistance);
@@ -1325,15 +1305,15 @@ namespace Jinwoo.FirstPersonController
                 }
 
             }
-            else //The grappling is on cooldown
+            else //그래플링 쿨다운 상태
             {
                 Crosshair.SetCrosshairToDefaultColor();
             }
 
-            //Handle line movement
+            //핸들 라인 이동
             if (grapplingDestinationPoint != null)
             {
-                //If we have a target update the destination point for the line (in case of a moving target)
+                //대상이 있는 경우 라인의 대상 지점을 업데이트함(움직이는 대상의 경우).
                 if (grapplingTarget != null)
                 {
                     grapplingDestinationPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1341,11 +1321,11 @@ namespace Jinwoo.FirstPersonController
 
                 OnGrapplingLine();
 
-                //The speed of the line is proportional to the distance from the destination point
+                //라인의 속도는 목적지로부터의 거리에 비례함
                 grapplingLaunchTimer += dt * grapplingHookSettings.grapplingLaunchSpeed * (grapplingHookSettings.launchMaxDistance * grapplingHookSettings.launchMaxDistance / grapplingStartDistanceSqr);
                 grapplingCurrentPoint = Vector3.Lerp(GetGrapplingLineStartPosition(), grapplingDestinationPoint.Value, grapplingLaunchTimer);
 
-                //The line has reached the destination point
+                //줄이 목적지에 도달함
                 if ((grapplingCurrentPoint - grapplingDestinationPoint.Value).sqrMagnitude < 0.1f)
                 {
                     grapplingDirectionStart = (grapplingCurrentPoint - GetTransformOrigin()).normalized;
@@ -1357,7 +1337,7 @@ namespace Jinwoo.FirstPersonController
                         OnBeginGrappling();
                         isGrappled = true;
                     }
-                    else //We didn't have a target
+                    else //목표가 없음
                     {
                         OnEndFailedGrapplingLine();
                     }
@@ -1367,16 +1347,16 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //Handle grappled character movement
+            //그래플된 캐릭터 이동 처리
 
-            if (isGrappled == false) //We are not grappled yet
+            if (isGrappled == false) //아직 그래플링 사용하지 않음
             {
                 grapplingCurrentDetachTimer = 0;
                 grapplingCurrentTimer = 0;
                 return;
             }
 
-            //Update the destination to follow the target (in case of a moving platform)
+            //대상을 따라가도록 목적지 업데이트(움직이는 플랫폼의 경우)
             if (grapplingTarget != null)
             {
                 grapplingCurrentPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1388,7 +1368,7 @@ namespace Jinwoo.FirstPersonController
 
             OnGrappling();
 
-            //If the current distance is below the threshold or the speed of the character exceed the limit, detach the character 
+            //현재 거리가 임계값 이하이거나 캐릭터의 속도가 제한을 초과하는 경우 캐릭터를 분리함.
             if (grapplingCurrentDistance <= grapplingHookSettings.detachMinDistanceCondition 
                 || GetCurrentSpeedSqr() > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition 
                 || momentum.sqrMagnitude > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition)
@@ -1413,11 +1393,11 @@ namespace Jinwoo.FirstPersonController
 
         private void HandleWallRun(float dt)
         {
-            //Wall run is not enabled
+            //월런이 활성화되지 않음
             if (enableWallRun == false)
                 return;
 
-            //Reset cooldown when grounded
+            //접지 시 재사용 대기시간 재설정
             if (isGrounded)
             {
                 lastTimeBeginWallRun = 0;
@@ -1427,7 +1407,7 @@ namespace Jinwoo.FirstPersonController
             {
                 float angle = Vector3.SignedAngle(bodyTransform.forward, currentWallRunDirection, bodyTransform.up);
 
-                //The camera tilt value target changes depending on the angle 
+                //카메라 기울기 값 대상은 각도에 따라 변경됩니다.
                 if (wallRunSettings.dynamicCameraTilt)
                 {
                     cameraController.SetCameraRootTiltLerped(angle / 90 * wallRunSettings.cameraTiltAngle, wallRunSettings.cameraTiltLerpSpeed, dt);
@@ -1456,7 +1436,7 @@ namespace Jinwoo.FirstPersonController
             if (currentControllerState != ControllerState.TacticalSprint)
                 return;
 
-            //Increase the timer value used to determine whether the tactical sprint should end
+            //전술 스프린트 종료 여부를 결정하는 데 사용되는 타이머 값을 늘립니다.
             currentTacticalSprintTimer += dt;
         }
 
@@ -1469,7 +1449,7 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.Proned)
             {
-                //Set 'speedMultiplier' to prone speed
+                //'speedMultiplier'를 경향 속도로 설정
                 speedMultiplier = proneSettings.speed;
 
                 movement = new Vector3(direction.x * speedMultiplier, this.movement.y, direction.z * speedMultiplier);
@@ -1477,15 +1457,13 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.TacticalSprint)
             {
-                //Set 'speedMultiplier' to tactical speed or normal speed or backpedal speed
+                //'speedMultiplier'를 전술 속도 또는 정상 속도 또는 백페달 속도로 설정
                 if (vertical < 0)
                     speedMultiplier = horizontalSpeedSettings.backwardsSpeed;
                 else
                 {
-                    //We are strafing
                     if (horizontal > 0.05f || horizontal < -0.05f)
                     {
-                        //We are strafing and pressing forward input
                         if (runSettings.canRunWhileStrafing && vertical > 0)
                         {
                             speedMultiplier = tacticalSprintSettings.speed;
@@ -1495,7 +1473,7 @@ namespace Jinwoo.FirstPersonController
                             speedMultiplier = horizontalSpeedSettings.defaultSpeed;
                         }
                     }
-                    else //We are just pressing forward input
+                    else
                     {
                         speedMultiplier = tacticalSprintSettings.speed;
                     }
@@ -1506,17 +1484,16 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.Standing)
             {
-                //Set 'speedMultiplier' to run speed or normal speed or backpedal speed
+                //'speedMultiplier'를 실행 속도 또는 정상 속도 또는 백페달 속도로 설정
                 if (vertical < 0)
                     speedMultiplier = horizontalSpeedSettings.backwardsSpeed;
                 else
                 {
                     if (isRunning && enableRun)
                     {
-                        //We are strafing
                         if (horizontal > 0.05f || horizontal < -0.05f)
                         {
-                            //We are strafing and pressing forward input
+                            
                             if (runSettings.canRunWhileStrafing && vertical > 0)
                             {
                                 speedMultiplier = runSettings.runSpeed;
@@ -1526,7 +1503,7 @@ namespace Jinwoo.FirstPersonController
                                 speedMultiplier = horizontalSpeedSettings.defaultSpeed;
                             }
                         }
-                        else //We are just pressing forward input
+                        else //앞으로 입력을 누르고 있음
                         {
                             speedMultiplier = runSettings.runSpeed;
                         }
@@ -1551,7 +1528,7 @@ namespace Jinwoo.FirstPersonController
             {
                 speedMultiplier = horizontalSpeedSettings.defaultSpeed;
 
-                //Apply air control
+                //공중 컨트롤 적용
                 movement = new Vector3(direction.x * speedMultiplier * jumpSettings.airControl, this.movement.y, direction.z * speedMultiplier * jumpSettings.airControl);
             }
 
@@ -1572,7 +1549,7 @@ namespace Jinwoo.FirstPersonController
                 landPositionY = GetColliderCeilPosition().y;
             }
 
-            //Handle landing
+            //착륙 처리
             if (previousIsGrounded == false && isGrounded == true)
             {
                 if (callbacksEnabled && isMorphingCollider == false)
@@ -1582,14 +1559,14 @@ namespace Jinwoo.FirstPersonController
             if (jumpSettings.jumpsCount == 0)
                 return;
 
-            //Handle begin jump
+            //핸들 시작 점프
             if (previousIsGrounded == true && isGrounded == false)
             {
                 if (callbacksEnabled && isMorphingCollider == false)
                     BeginJump();
             }
 
-            //Ceiling movement constraint
+            //천장 이동 구속
             Ray ray = new Ray(GetColliderCeilPosition(), bodyTransform.up);
             if (Physics.Raycast(ray, 0.05f))
             {
@@ -1602,14 +1579,14 @@ namespace Jinwoo.FirstPersonController
 
             if (isGrounded)
             {
-                //Reset jump variables
+                //점프 값 리셋
                 currentJumpTimer = 0;
                 jumpLocked = false;
                 lastTimeGrounded = Time.time;
                 currentJumpsCount = 0;
             }
 
-            //Handle multiple jumps
+            //다중 점프 핸들
             if (isJumpButtonDown)
             {
                 currentJumpsCount++;
@@ -1646,10 +1623,10 @@ namespace Jinwoo.FirstPersonController
                     if (movement.y < 0)
                         movement.y = 0;
 
-                    //Increase jump timer
+                    //점프 타이머 증가
                     currentJumpTimer += dt;
 
-                    //Add jump speed
+                    //점프 스피드 더하기
                     movement.y += currentJumpSpeed * dt;
 
                     isTryingToJump = true;
@@ -1734,7 +1711,7 @@ namespace Jinwoo.FirstPersonController
                 //지면에 투영된 캐릭터의 전방 방향 계산
                 Vector3 groundDirection = Vector3.ProjectOnPlane(cameraTransform.forward, currentGroundNormal).normalized;
 
-                //sliding on a slope
+                //경사면에서 미끄러짐
                 if (slideDirection.x < 0 || slideDirection.z < 0)
                 {
                     momentum += slideDirection * dt * dt * slideSettings.slideGravity;
@@ -1747,12 +1724,12 @@ namespace Jinwoo.FirstPersonController
                     momentum = IncrementVectorTowardTargetVector(momentum, Vector3.Angle(momentum.normalized, groundDirection) * slideSettings.cameraRotationFrictionFactor, dt, Vector3.zero);
                 }
 
-                //Apply horizontal movement control to the momentum
+                //운동량에 수평 이동 제어 적용
                 momentum += Vector3.ProjectOnPlane(cameraTransform.right, tr.up).normalized * horizontal * horizontalSpeedSettings.defaultSpeed * slideSettings.horizontalControl * dt;
 
                 momentum.y = 0;
 
-                //We will use released momentum in the final velocity calculation while sliding
+                //미끄러지는 동안 최종 속도 계산에서 해제된 운동량을 사용함
                 releasedMomentum = momentum;
             }
 
@@ -1760,10 +1737,9 @@ namespace Jinwoo.FirstPersonController
             {
                 if (momentum.sqrMagnitude > 0.01f)
                 {
-                    //Slow down the momentum using 'airMomentumFriction' value
+                    //'airMomentumFriction' 값을 사용하여 모멘텀을 늦춘다
                     momentum = IncrementVectorTowardTargetVector(momentum, jumpSettings.airMomentumFriction, dt, Vector3.zero);
 
-                    //Release the current momentum
                     releasedMomentum = momentum;
                 }
                 else
@@ -1782,7 +1758,7 @@ namespace Jinwoo.FirstPersonController
                 }
                 else
                 {
-                    //While in normal locomotion (walking, running etc...), the "stored" momentum will be the horizontal movement
+                    //정상적인 이동(걷기, 달리기 등...)을 하는 동안 "저장된" 운동량은 수평 이동됨
                     Vector3 horizontalMovement = previousMovement - ExtractDotVector(previousMovement, tr.up);
                     momentum = horizontalMovement;
                     releasedMomentum = Vector3.zero;
@@ -1798,10 +1774,10 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.Sliding)
             {
-                //Just use the released momentum as movement while sliding
+                //미끄러지는 동안 방출된 운동량을 움직임으로 사용하면 안됨.
                 finalMovement = releasedMomentum;
 
-                //When sliding while in the air use the current gravity force as vertical movement
+                //공중에서 미끄러질 때 현재 중력을 수직이동으로 사용
                 if (isGrounded == false || isTryingToJump)
                     finalMovement.y = movement.y;
             }
@@ -1824,7 +1800,7 @@ namespace Jinwoo.FirstPersonController
 
                 Vector3 verticalMovement = ExtractDotVector(momentumMovement, Vector3.up);
 
-                //Clamp the horizontal movement to run speed or normal speed while not sliding
+                //미끄러지지 않고 수평 이동을 실행 속도 또는 정상 속도로 고정
                 Vector3 clampedHorizontalMovement = Vector3.ClampMagnitude(momentumMovement - verticalMovement, tacticalSprintSettings.speed);
 
                 finalMovement = verticalMovement + clampedHorizontalMovement;
@@ -1836,7 +1812,7 @@ namespace Jinwoo.FirstPersonController
 
                 Vector3 verticalMovement = ExtractDotVector(momentumMovement, Vector3.up);
 
-                //Clamp the horizontal movement to run speed or normal speed while not sliding
+                //미끄러지지 않고 수평 이동을 실행 속도 또는 정상 속도로 고정
                 Vector3 clampedHorizontalMovement = Vector3.ClampMagnitude(momentumMovement - verticalMovement, proneSettings.speed);
 
                 finalMovement = verticalMovement + clampedHorizontalMovement;
@@ -1852,50 +1828,50 @@ namespace Jinwoo.FirstPersonController
                 finalMovement = movement;
             }
 
-            //Stick the character on the ground while not jumping to avoid bumps while going down a slope
+            //경사면을 내려갈 때 충돌을 피하기 위해 점프하지 않는 동안 캐릭터를 땅에 붙임
             if (isGrounded && isTryingToJump == false && isGrappled == false && currentControllerState != ControllerState.Climb)
             {
                 finalMovement.y = -2000;
             }
 
-            //Clamp the horizontal movement to maximum horizontal speed
+            //수평 이동을 최대 수평 속도로 고정
             Vector3 finalMovementVertical = ExtractDotVector(finalMovement, Vector3.up);
             Vector3 finalMovementHorizontalClamped = Vector3.ClampMagnitude(finalMovement - finalMovementVertical, horizontalSpeedSettings.horizontalMaxSpeed);
             finalMovement = finalMovementVertical + finalMovementHorizontalClamped;
 
-            //Clamp the vertical movement to maximum vertical speed
+            //수직 이동을 최대 수직 속도로 고정
             if (finalMovement.y > jumpSettings.verticalMaxSpeed)
             {
                 finalMovement.y = jumpSettings.verticalMaxSpeed;
             }
 
-            //Move the controller
+            //컨트롤러 이동
             characterController.Move(finalMovement * dt);
 
         }
 
         private void HandlePlatforms()
         {
-            //We are on a platform
+            //우리는 플랫폼에 있음
             if (standingPlatform != null)
             {
-                //This is the player world position
+                //플레이어 월드 위치
                 Vector3 newGlobalPlatformPoint = standingPlatform.TransformPoint(currentLocalPositionInStandingPlaform);
 
-                //Movement relative to the previous frame position 
+                //이전 프레임 위치에 상대적인 이동
                 relativeMovementOnStandingPlatform = newGlobalPlatformPoint - currentPositionInStandingPlaform;
 
-                //If a movement occurred teleport the character so that it stays on the platform
+                //움직임이 발생하면 플랫폼에 머물도록 캐릭터를 텔레포트함
                 if (relativeMovementOnStandingPlatform.magnitude > 0.001f)
                 {
                     Teleport(tr.position + relativeMovementOnStandingPlatform);
                 }
 
-                //Support moving platform rotation
+                //이동 플랫폼 회전 지원
                 Quaternion newGlobalPlatformRotation = standingPlatform.rotation * currentLocalRotationInStandingPlatform;
                 Quaternion rotationDiff = newGlobalPlatformRotation * Quaternion.Inverse(currentRotationInStandingPlatform);
 
-                //Prevent rotation of the local up vector
+                //로컬 상향 벡터의 회전 방지
                 rotationDiff = Quaternion.FromToRotation(rotationDiff * Vector3.up, Vector3.up) * rotationDiff;
                 transform.rotation = rotationDiff * transform.rotation;
                 transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
@@ -1916,7 +1892,7 @@ namespace Jinwoo.FirstPersonController
         {
             if (raycastIsGrounded == false && characterController.isGrounded && isClimbingAnimation == false)
             {
-                //Create a ray pointing down world space
+                //세계 공간을 가리키는 광선 만들기
                 if (Physics.SphereCast(GetTransformOrigin() + characterController.center, characterController.radius - characterController.skinWidth, Vector3.down, out var hit, characterController.height * 0.7f))
                 {
                     edgeFallDirection = (hit.normal + Vector3.down).normalized;
@@ -1925,8 +1901,9 @@ namespace Jinwoo.FirstPersonController
             }
         }
 
-        //Use this function to move the character around by any distance. Do not use transform.position as it gets overrided by 'CharacterController' 
-        //It can be used to move the character each frame without issues
+
+        //이 함수를 사용하여 임의의 거리만큼 캐릭터를 이동함. transform.position은 'CharacterController'에 의해 재정의되므로 사용하지 마라
+        // 문제없이 각 프레임마다 캐릭터를 이동하는 데 사용할 수 있음
         public void Teleport(Vector3 worldPosition)
         {
             characterController.enabled = false;
@@ -1943,17 +1920,17 @@ namespace Jinwoo.FirstPersonController
                 return;
             }
 
-            //We dont want to push objects below us
+            //자신 아래에 있는 물체를 밀지 않음.
             if (hit.moveDirection.y < -0.3)
             {
                 return;
             }
 
-            //Calculate push direction from move direction,
-            //we only push objects to the sides never up and down
+            //이동 방향에서 푸시 방향을 계산함
+            //위아래가 아닌 측면으로만 개체를 ​​밀어 넣는다
             Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
 
-            //Apply the push
+            //푸시 적용
             body.AddForceAtPosition(pushDir * collisionPushPower, hit.point);
 
         }
@@ -1981,7 +1958,7 @@ namespace Jinwoo.FirstPersonController
             float threshold = 0.001f;
             isMorphingCollider = true;
 
-            //Loop until the character height is almost equal to target
+            //캐릭터 높이가 타겟과 거의 같아질 때까지 반복
             while (Mathf.Abs(characterController.height - target) > threshold)
             {
                 float oldHeight = characterController.height;
@@ -1990,10 +1967,10 @@ namespace Jinwoo.FirstPersonController
                 characterController.radius = Mathf.Min(newHeight / 2f, colliderMaxRadius);
                 characterController.height = newHeight;
 
-                //Re-center the collider in order to maintain the transform position on the base of the collider
+                //콜라이더 베이스에서 변환 위치를 유지하기 위해 콜라이더를 다시 중앙에 배치함.
                 characterController.center = new Vector3(characterController.center.x, characterController.height / 2, characterController.center.z);
 
-                //Since we adjusted the collider center we must also move the character up or down in order to maintain the same position
+                //콜라이더 중심을 조정했기 때문에 동일한 위치를 유지하기 위해 캐릭터를 위 또는 아래로 이동해야 함
                 if (resize)
                 {
                     if (characterController.height < oldHeight)
@@ -2015,7 +1992,7 @@ namespace Jinwoo.FirstPersonController
 
         }
 
-        //Resize the collider height without interpolation
+        //보간 없이 콜라이더 높이 크기 조정
         private void ResizeCollider(float newHeight)
         {
             StopColliderHeightAutoLerp();
@@ -2067,7 +2044,7 @@ namespace Jinwoo.FirstPersonController
             return isGrounded;
         }
 
-        //Use this function to check whether with the target collider height the character collides with an object
+        //이 기능을 사용하여 대상 충돌체 높이로 캐릭터가 물체와 충돌하는지 여부를 확인함
         private bool IsColliderSpaceFree(float targetHeight)
         {
             float targetRadius = characterController.radius = Mathf.Min(targetHeight / 2f, colliderMaxRadius);
@@ -2086,13 +2063,13 @@ namespace Jinwoo.FirstPersonController
             return true;
         }
 
-        //World position of the collider base
+        //충돌기 베이스의 세계 위치
         public Vector3 GetColliderBasePosition()
         {
             return tr.TransformPoint(characterController.center - Vector3.up * characterController.height / 2);
         }
 
-        //World position of the collider center
+        //충돌기 센터의 세계 위치
         public Vector3 GetColliderCenterPosition()
         {
             return tr.TransformPoint(characterController.center);
@@ -2128,10 +2105,10 @@ namespace Jinwoo.FirstPersonController
                 Vector3 p1 = GetColliderBasePosition() + Vector3.up * (characterController.radius);
                 Vector3 p2 = GetColliderBasePosition() + Vector3.up * (characterController.height) - Vector3.up * (characterController.radius);
 
-                //This capsule cast checks if the character has a climbable object in front of him
+                //이 캡슐 캐스트는 캐릭터 앞에 오를 수 있는 물체가 있는지 확인함
                 if (Physics.CapsuleCast(p1, p2, characterController.radius, bodyTransform.forward, out var climbDetectionRayHit, climbSettings.maxDistanceFromClimbableObject, climbSettings.climbableObjectLayerMask))
                 {
-                    //It must face a wall-like obstacle
+                    //벽과 같은 장애물에 직면해야 함
                     if (CalculateSlope(climbDetectionRayHit.normal) > 80)
                     {
                         int wallCheckSegmentsMaxIterations= 5;
@@ -2154,7 +2131,7 @@ namespace Jinwoo.FirstPersonController
                                    // Debug.Break();
                                     Debug.DrawRay(ledgeDetectionRay.origin, ledgeDetectionRay.direction, Color.cyan);
 
-                                    //Get the destination point and begin climbing
+                                    //목적지를 확인하고 클라이밍을 시작.
                                     if (Physics.Raycast(ledgeDetectionRay, out var freeSpaceHit, Mathf.Abs(wallCheckSegmentRay.origin.y - GetColliderBasePosition().y), climbSettings.climbableObjectLayerMask))
                                     {
                                         Vector3 freeSpaceHitPoint = freeSpaceHit.point;
@@ -2175,7 +2152,7 @@ namespace Jinwoo.FirstPersonController
                                                 climbStartPoint = tr.position;
                                                 climbStartDistanceSqr = (climbStartPoint - climbEndPoint).sqrMagnitude;
 
-                                                //Increase timer. 'dt / climbDuration' means the progress is duration based and not speed based. 
+                                                //타이머를 늘림. 'dt / ClimbDuration'은 진행률이 속도 기반이 아니라 기간 기반임을 의미
                                                 climbDuration = Mathf.Min((climbSettings.maxDuration * (climbStartDistanceSqr / (climbSettings.durationMaxDistance * climbSettings.durationMaxDistance))),
                                                     climbSettings.maxDuration);
 
@@ -2252,12 +2229,12 @@ namespace Jinwoo.FirstPersonController
         {
             currentPositionInStandingPlaform = transform.position;
 
-            //Calculate local position relative to the standing platform
+            //스탠딩 플랫폼을 기준으로 로컬 위치 계산
             currentLocalPositionInStandingPlaform = standingPlatform.InverseTransformPoint(transform.position);
 
             currentRotationInStandingPlatform = transform.rotation;
 
-            //Calculate local rotation relative to the standing platform
+            //스탠딩 플랫폼에 대한 로컬 회전 계산
             currentLocalRotationInStandingPlatform = Quaternion.Inverse(standingPlatform.rotation) * transform.rotation;
         }
 
@@ -2265,14 +2242,14 @@ namespace Jinwoo.FirstPersonController
         {
             if (grapplingLine != null)
             {
-                //Enable the line renderer and the hook only when the character is grappled or the destination point has been evaluated
+                //캐릭터가 잡혔거나 대상 지점이 평가된 경우에만 라인 렌더러와 후크를 활성화함
                 grapplingLine.enabled = grapplingDestinationPoint.HasValue || isGrappled;
                 grapplingLineHook.SetActive(grapplingLine.enabled);
 
                 if (grapplingLine.enabled)
                 {
 
-                    //Set up grappling line renderer and spring
+                    //그래플링 라인 렌더러 및 스프링 설정
                     if (grapplingLine.positionCount == 0)
                     {
                         grapplingLineSpring.SetVelocity(grapplingHookSettings.lineRendererWaveStrength);
@@ -2283,7 +2260,7 @@ namespace Jinwoo.FirstPersonController
                     grapplingLineSpring.SetStrength(grapplingHookSettings.lineRendererWaveStiffness);
                     grapplingLineSpring.Update(dt);
 
-                    //Find grapple point
+                    //그래플 포인트 찾기
                     var grapplePoint = grapplingCurrentPoint - (grapplingCurrentPoint - GetGrapplingLineStartPosition()).normalized * grapplingHookSettings.hookOffsetFromTarget;
                     var grappleStartPosition = GetGrapplingLineStartPosition();
                     var up = Quaternion.LookRotation((grapplePoint - grappleStartPosition).normalized) * Vector3.up;
@@ -2303,13 +2280,13 @@ namespace Jinwoo.FirstPersonController
                         grapplingLineSegmentsPositions[i] = segmentPosition;
                     }
 
-                    //Set the hook position to the last segment of the line renderer
+                    //후크 위치를 라인 렌더러의 마지막 세그먼트로 설정
                     grapplingLineHook.transform.position = grapplingLineSegmentsPositions[grapplingLineSegmentsPositions.Length - 1];
                 }
             }
         }
 
-        //This method gets called when the grappling line has been launched
+        //그래플링 라인이 시작되면 이 메서드가 호출됨
         private void GrapplingLineBegin(Vector3 target)
         {
             lastTimeGrappling = Time.time;
@@ -2317,7 +2294,7 @@ namespace Jinwoo.FirstPersonController
             grapplingDestinationPoint = target;
             grapplingStartDistanceSqr = (grapplingCurrentPoint - grapplingDestinationPoint.Value).sqrMagnitude;
 
-            //If the grappling line hasn't been instantiated yet, instantiate it and set up its properties
+            //그래플링 라인이 아직 인스턴스화되지 않은 경우 인스턴스화하고 해당 속성을 설정
             if (grapplingLine == null)
             {
                 grapplingLine = new GameObject("Grappling Hook Line").AddComponent<LineRenderer>();

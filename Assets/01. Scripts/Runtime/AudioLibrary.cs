@@ -2,14 +2,14 @@
 
 namespace Jinwoo.FirstPersonController
 {
-    //Handy way of playing clips using ids and static methods
+    //ID 및 정적 메서드를 사용하여 클립을 간편하게 재생하는 방법
     public class AudioLibrary : MonoBehaviour
     {
         #region Fields
 
         private const int MAX_POOL_SIZE = 15;
 
-        //Pool of audio sources for 2D usage
+        //2D 사용을 위한 오디오 소스 풀
         private AudioSource[] sources2D;
         private Transform poolTransform;
 
@@ -59,7 +59,7 @@ namespace Jinwoo.FirstPersonController
             if (clip == null)
                 return null;
 
-            //Cycle throught the 2D sources until you find one that it's not already playing anything
+            //아무 것도 재생하지 않는 것을 찾을 때까지 2D 소스를 순환함
             foreach (var source2D in Instance.sources2D)
             {
                 if (source2D.isPlaying == false)
@@ -69,7 +69,7 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            Debug.LogError("Not enough free 2D sources to play this clip");
+            //Debug.LogError("Not enough free 2D sources to play this clip");
             return null;
         }
 
@@ -100,24 +100,24 @@ namespace Jinwoo.FirstPersonController
             }
         }
 
-        //Play a clip in the world space position 'point'
+        //월드 공간 위치 '포인트'에서 클립 재생
         public static AudioSource Play3D(AudioClip clip, Vector3 point)
         {
 
-            //Instantiate a temporarly gameObject just for this play
+            //이 플레이만을 위한 임시 gameObject를 인스턴스화함
             GameObject tempGO = new GameObject("TempAudio");
 
             //Set it to the desired position
             tempGO.transform.position = point;
 
-            //Add the 'AudioSource' component in order to play the audio
+            //오디오를 재생하기위해 'AudioSource' 구성요소를 추가
             AudioSource aSource = tempGO.AddComponent<AudioSource>();
 
-            //Place the clip and play it
+            //클립을 놓고 재생
             aSource.clip = clip;
             aSource.Play();
 
-            //Destory the gameObject after the duration of the clip
+            //클립 지속 시간 후 gameObject를 파괴함 ---> 나중에 풀링 해야됨
             Destroy(tempGO, clip.length);
 
             return aSource;
