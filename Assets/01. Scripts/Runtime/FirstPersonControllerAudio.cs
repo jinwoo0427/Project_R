@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Jinwoo.FirstPersonController
 {
-	//Responsible of handling audio for the 'FirstPersonController' class
+	//'FirstPersonController' 클래스의 오디오 처리 담당
 	public class FirstPersonControllerAudio : MonoBehaviour
 	{
 		#region Fields
@@ -14,22 +14,22 @@ namespace Jinwoo.FirstPersonController
 		[Space(5)]
 		[Header("Settings"), Space(5)]
 
-		//Master volume modifier for all the sfx in this script
+		//이 스크립트의 모든 sfx에 대한 마스터 볼륨 수정자
 		[SerializeField, Range(0f, 1f)]
 		private float masterVolume = 0.1f;
 
-		//Minimum distance the character has to travel in order to trigger the footstep sfx
+		//발자국 특수 효과를 트리거하기 위해 캐릭터가 이동해야 하는 최소 거리
 		[SerializeField]
 		private float footstepMinimumDistance = 0.2f;
 
-		//Apply a random distortion in the volume for the footstep sfx
+		//발자국 sfx의 볼륨에 무작위 왜곡을 적용함
 		[SerializeField]
 		private float footstepRandomVolumeDelta = 0.2f;
 
 		[SerializeField]
 		private float proneFootstepMinimumDistance = 0.2f;
 
-		//Apply a random distortion in the volume for the footstep sfx
+		//발자국 sfx의 볼륨에 무작위 왜곡을 적용함
 		[SerializeField]
 		private float proneFootstepRandomVolumeDelta = 0.2f;
 
@@ -97,7 +97,7 @@ namespace Jinwoo.FirstPersonController
 
 		private Transform tr;
 
-		//Distance from last footstep sound play
+		//마지막 발자국 소리 재생까지의 거리
 		private float currentFootstepDistance = 0f;
 
 		private AudioSource currentSlideAudioSource;
@@ -117,10 +117,10 @@ namespace Jinwoo.FirstPersonController
 		#region Methods
 		private void Start()
 		{
-			//Caching transform is faster in older versions of Unity
+			//변환 캐싱은 이전 버전의 Unity에서 더 빠르다고 함(아마두?)
 			tr = transform;
 
-			//Plug events
+			//이벤트 플러그
 			controller.OnLand += OnLand;
 			controller.OnJump += OnJump;
 			controller.OnJumpsCountIncrease += OnJumpsCountIncrease;
@@ -144,21 +144,21 @@ namespace Jinwoo.FirstPersonController
 			controller.OnClimbBegin += OnClimbBegin;
 			controller.OnClimbEnd += OnClimbEnd;
 
-			//We cache the lenght of the slide clip in order to loop through it while sliding
+			//슬라이드하는 동안 루프를 통과하기 위해 슬라이드 클립의 길이를 캐시함
 			if (slideClip)
 			{
 				slideSoundCooldown = slideClip.length;
 				lastTimeSlide = -slideClip.length;
 			}
 
-			//We cache the lenght of the grappling clip in order to loop through it while grappling
+			//그래플링하는 동안 반복하기 위해 그래플링 클립의 길이를 캐시
 			if (grapplingClip)
 			{
 				grapplingSoundCooldown = grapplingClip.length;
 				lastTimeGrappling = -grapplingClip.length;
 			}
 
-			//We cache the lenght of the grappling clip in order to loop through it while grappling
+			//그래플링하는 동안 반복하기 위해 그래플링 클립의 길이를 캐시함
 			if (wallRunClip)
 			{
 				wallRunSoundCooldown = wallRunClip.length;
@@ -171,7 +171,7 @@ namespace Jinwoo.FirstPersonController
 			controller.OnLand -= OnLand;
 			controller.OnJump -= OnJump;
 
-			//FirstPersonController.OnSlide event gets called every fixed update while the character is sliding
+			//FirstPersonController.OnSlide 이벤트는 캐릭터가 미끄러지는 동안 고정 업데이트마다 호출됨
 			controller.OnSlide -= OnSlide;
 
 			controller.OnEndSlide -= OnEndSlide;
@@ -188,7 +188,7 @@ namespace Jinwoo.FirstPersonController
 
 		private void PlayFootsteps(AudioClip[] clips, float stepMinimumDistance, float randomVolumeDelta, FirstPersonController.ControllerState state)
 		{
-			//We don't want to play footsteps while not in the target state
+			//목표 상태에 있지 않은 동안 발자국을 재생하지 않음.
 			if (controller.currentControllerState != state)
 			{
 				return;
@@ -196,16 +196,16 @@ namespace Jinwoo.FirstPersonController
 
 			Vector3 vel = controller.GetVelocity();
 
-			//Extract the horizotal velocity from velocity
+			//속도에서 수평 속도 추출
 			Vector3 horizontalVelocity = RemoveDotVector(vel, tr.up);
 
 			float currentMovementSpeed = horizontalVelocity.magnitude;
 			currentFootstepDistance += Time.deltaTime * currentMovementSpeed;
 
-			//The minumum distance has been reached
+			//최소 거리에 도달함
 			if (currentFootstepDistance > stepMinimumDistance)
 			{
-				//Play the footstep sound only if the the character is grounded and it's moving faster than the minimum threshold
+				//캐릭터가 바닥에 있고 최소 임계값보다 빠르게 움직이는 경우에만 발자국 소리를 재생함
 				if (controller.IsGrounded() && currentMovementSpeed > footstepControllerSpeedMinimumThreshold)
 				{
 					int randomFoostepClipIndex = UnityEngine.Random.Range(0, clips.Length);
@@ -220,13 +220,13 @@ namespace Jinwoo.FirstPersonController
 			if (landDistance < 0.5f)
 				return;
 
-			//Play land audio clip;
+			//착지 오디오 클립을 재생
 			AudioLibrary.Play2D(landClip, masterVolume);
 		}
 
 		private void OnJump()
 		{
-			//Play jump audio clip;
+			//점프 오디오 클립을 재생
 			AudioLibrary.Play2D(jumpClip, masterVolume);
 		}
 
@@ -235,7 +235,6 @@ namespace Jinwoo.FirstPersonController
 			if (jumpsCountIncreasesClips.Length < jumpsCount)
 				return;
 
-			//Play jump audio clip;
 			AudioClip clip = jumpsCountIncreasesClips[jumpsCount - 1];
 
 			if (clip != null)
@@ -260,7 +259,7 @@ namespace Jinwoo.FirstPersonController
 			lastTimeSlide = 0;
 		}
 
-		//FirstPersonController.OnSlide event gets called every fixed update while the character is sliding
+		//FirstPersonController.OnSlide 이벤트는 캐릭터가 미끄러지는 동안 고정 업데이트마다 호출됨
 		private void OnSlide()
 		{
 			if (IsSlideSoundCooldown() == false)
@@ -278,7 +277,7 @@ namespace Jinwoo.FirstPersonController
 			lastTimeSlide = 0;
 		}
 
-		//'slideSoundCooldown' is the lenght of the slide clip, it's done in order to loop through it while sliding
+		//'slideSoundCooldown'은 슬라이드 클립의 길이이며, 슬라이드하는 동안 루프를 통과하기 위해 수행됨
 		private bool IsSlideSoundCooldown()
 		{
 			return Time.time < lastTimeSlide + slideSoundCooldown;
@@ -325,7 +324,7 @@ namespace Jinwoo.FirstPersonController
 			}
 		}
 
-		//'grapplingSoundCooldown' is the lenght of the slide clip, it's done in order to loop through it while grappling
+		//'grapplingSoundCooldown'은 슬라이드 클립의 길이이며, 그래플링하는 동안 루프를 통과하기 위해 수행됨
 		private bool IsGrapplingSoundCooldown()
 		{
 			return Time.time < lastTimeGrappling + grapplingSoundCooldown;
@@ -376,7 +375,7 @@ namespace Jinwoo.FirstPersonController
 			}
 		}
 
-		//'wallRunSoundCooldown' is the lenght of the slide clip, it's done in order to loop through it while wall running
+		//'wallRunSoundCooldown'은 슬라이드 클립의 길이이며 벽을 달리는 동안 루프를 통과하기 위해 수행됨
 		private bool IsWallRunSoundCooldown()
 		{
 			return Time.time < lastTimeWallRun + wallRunSoundCooldown;
@@ -390,7 +389,7 @@ namespace Jinwoo.FirstPersonController
 			lastTimeWallRun = 0;
 		}
 
-		//Remove all parts from a vector that are pointing in the same direction as 'dir'
+		//벡터에서 'dir'과 같은 방향을 가리키는 모든 부분을 제거함
 		public static Vector3 RemoveDotVector(Vector3 vec, Vector3 dir)
 		{
 			if (dir.sqrMagnitude != 1)

@@ -1274,29 +1274,29 @@ namespace Jinwoo.FirstPersonController
             //라인 시작 핸들
             if (IsGrapplingOnCooldown() == false)
             {
-                //Get ray from camera direction
+                //카메라 방향에서 광선을 얻음
                 Ray ray = cameraController.GetCamera().ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-                //The character is in range of hitting something
+                //캐릭터가 무언가를 치는 범위에 있음
                 if (Physics.Raycast(ray, out var hit, grapplingHookSettings.launchMaxDistance, grapplingHookSettings.hookableObjectLayerMask))
                 {
                     Crosshair.SetCrosshairColor(grapplingHookSettings.crosshairColor);
 
-                    //The player has hit the hook button
+                    //플레이어가 훅 버튼을 누름
                     if (characterInput.IsHookButtonDown())
                     {
                         GrapplingLineBegin(hit.point);
                         grapplingTarget = hit.collider.transform;
 
-                        //Set the relative position from the target hit by the hook (in case the target is a moving platform)
+                        //훅에 맞은 대상과의 상대 위치 설정(대상이 움직이는 발판인 경우)
                         grapplingDestinationPointTargetLocalPosition = grapplingTarget.InverseTransformPoint(hit.point);
                     }
                 }
-                else //The character is not in range of hitting something. The rope will be launched anyway but the character will not move
+                else //캐릭터가 무언가를 치는 범위에 있지 않음. 어쨌든 로프는 발사되지만 캐릭터는 움직이지 않음
                 {
                     Crosshair.SetCrosshairToDefaultColor();
 
-                    //The player has hit the hook button
+                    //플레이어가 훅 버튼을 누름.
                     if (characterInput.IsHookButtonDown())
                     {
                         GrapplingLineBegin(ray.origin + ray.direction * grapplingHookSettings.launchMaxDistance);
@@ -1305,15 +1305,15 @@ namespace Jinwoo.FirstPersonController
                 }
 
             }
-            else //The grappling is on cooldown
+            else //그래플링 쿨다운 상태
             {
                 Crosshair.SetCrosshairToDefaultColor();
             }
 
-            //Handle line movement
+            //핸들 라인 이동
             if (grapplingDestinationPoint != null)
             {
-                //If we have a target update the destination point for the line (in case of a moving target)
+                //대상이 있는 경우 라인의 대상 지점을 업데이트함(움직이는 대상의 경우).
                 if (grapplingTarget != null)
                 {
                     grapplingDestinationPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1321,11 +1321,11 @@ namespace Jinwoo.FirstPersonController
 
                 OnGrapplingLine();
 
-                //The speed of the line is proportional to the distance from the destination point
+                //라인의 속도는 목적지로부터의 거리에 비례함
                 grapplingLaunchTimer += dt * grapplingHookSettings.grapplingLaunchSpeed * (grapplingHookSettings.launchMaxDistance * grapplingHookSettings.launchMaxDistance / grapplingStartDistanceSqr);
                 grapplingCurrentPoint = Vector3.Lerp(GetGrapplingLineStartPosition(), grapplingDestinationPoint.Value, grapplingLaunchTimer);
 
-                //The line has reached the destination point
+                //줄이 목적지에 도달함
                 if ((grapplingCurrentPoint - grapplingDestinationPoint.Value).sqrMagnitude < 0.1f)
                 {
                     grapplingDirectionStart = (grapplingCurrentPoint - GetTransformOrigin()).normalized;
@@ -1337,7 +1337,7 @@ namespace Jinwoo.FirstPersonController
                         OnBeginGrappling();
                         isGrappled = true;
                     }
-                    else //We didn't have a target
+                    else //목표가 없음
                     {
                         OnEndFailedGrapplingLine();
                     }
@@ -1347,16 +1347,16 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //Handle grappled character movement
+            //그래플된 캐릭터 이동 처리
 
-            if (isGrappled == false) //We are not grappled yet
+            if (isGrappled == false) //아직 그래플링 사용하지 않음
             {
                 grapplingCurrentDetachTimer = 0;
                 grapplingCurrentTimer = 0;
                 return;
             }
 
-            //Update the destination to follow the target (in case of a moving platform)
+            //대상을 따라가도록 목적지 업데이트(움직이는 플랫폼의 경우)
             if (grapplingTarget != null)
             {
                 grapplingCurrentPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1368,7 +1368,7 @@ namespace Jinwoo.FirstPersonController
 
             OnGrappling();
 
-            //If the current distance is below the threshold or the speed of the character exceed the limit, detach the character 
+            //현재 거리가 임계값 이하이거나 캐릭터의 속도가 제한을 초과하는 경우 캐릭터를 분리함.
             if (grapplingCurrentDistance <= grapplingHookSettings.detachMinDistanceCondition 
                 || GetCurrentSpeedSqr() > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition 
                 || momentum.sqrMagnitude > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition)
@@ -1393,11 +1393,11 @@ namespace Jinwoo.FirstPersonController
 
         private void HandleWallRun(float dt)
         {
-            //Wall run is not enabled
+            //월런이 활성화되지 않음
             if (enableWallRun == false)
                 return;
 
-            //Reset cooldown when grounded
+            //접지 시 재사용 대기시간 재설정
             if (isGrounded)
             {
                 lastTimeBeginWallRun = 0;
@@ -1407,7 +1407,7 @@ namespace Jinwoo.FirstPersonController
             {
                 float angle = Vector3.SignedAngle(bodyTransform.forward, currentWallRunDirection, bodyTransform.up);
 
-                //The camera tilt value target changes depending on the angle 
+                //카메라 기울기 값 대상은 각도에 따라 변경됩니다.
                 if (wallRunSettings.dynamicCameraTilt)
                 {
                     cameraController.SetCameraRootTiltLerped(angle / 90 * wallRunSettings.cameraTiltAngle, wallRunSettings.cameraTiltLerpSpeed, dt);
@@ -1436,7 +1436,7 @@ namespace Jinwoo.FirstPersonController
             if (currentControllerState != ControllerState.TacticalSprint)
                 return;
 
-            //Increase the timer value used to determine whether the tactical sprint should end
+            //전술 스프린트 종료 여부를 결정하는 데 사용되는 타이머 값을 늘립니다.
             currentTacticalSprintTimer += dt;
         }
 
@@ -1449,7 +1449,7 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.Proned)
             {
-                //Set 'speedMultiplier' to prone speed
+                //'speedMultiplier'를 경향 속도로 설정
                 speedMultiplier = proneSettings.speed;
 
                 movement = new Vector3(direction.x * speedMultiplier, this.movement.y, direction.z * speedMultiplier);
@@ -1457,15 +1457,13 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.TacticalSprint)
             {
-                //Set 'speedMultiplier' to tactical speed or normal speed or backpedal speed
+                //'speedMultiplier'를 전술 속도 또는 정상 속도 또는 백페달 속도로 설정
                 if (vertical < 0)
                     speedMultiplier = horizontalSpeedSettings.backwardsSpeed;
                 else
                 {
-                    //We are strafing
                     if (horizontal > 0.05f || horizontal < -0.05f)
                     {
-                        //We are strafing and pressing forward input
                         if (runSettings.canRunWhileStrafing && vertical > 0)
                         {
                             speedMultiplier = tacticalSprintSettings.speed;
@@ -1475,7 +1473,7 @@ namespace Jinwoo.FirstPersonController
                             speedMultiplier = horizontalSpeedSettings.defaultSpeed;
                         }
                     }
-                    else //We are just pressing forward input
+                    else
                     {
                         speedMultiplier = tacticalSprintSettings.speed;
                     }
@@ -1486,17 +1484,16 @@ namespace Jinwoo.FirstPersonController
 
             if (currentControllerState == ControllerState.Standing)
             {
-                //Set 'speedMultiplier' to run speed or normal speed or backpedal speed
+                //'speedMultiplier'를 실행 속도 또는 정상 속도 또는 백페달 속도로 설정
                 if (vertical < 0)
                     speedMultiplier = horizontalSpeedSettings.backwardsSpeed;
                 else
                 {
                     if (isRunning && enableRun)
                     {
-                        //We are strafing
                         if (horizontal > 0.05f || horizontal < -0.05f)
                         {
-                            //We are strafing and pressing forward input
+                            
                             if (runSettings.canRunWhileStrafing && vertical > 0)
                             {
                                 speedMultiplier = runSettings.runSpeed;
@@ -1506,7 +1503,7 @@ namespace Jinwoo.FirstPersonController
                                 speedMultiplier = horizontalSpeedSettings.defaultSpeed;
                             }
                         }
-                        else //We are just pressing forward input
+                        else //앞으로 입력을 누르고 있음
                         {
                             speedMultiplier = runSettings.runSpeed;
                         }
@@ -1531,7 +1528,7 @@ namespace Jinwoo.FirstPersonController
             {
                 speedMultiplier = horizontalSpeedSettings.defaultSpeed;
 
-                //Apply air control
+                //공중 컨트롤 적용
                 movement = new Vector3(direction.x * speedMultiplier * jumpSettings.airControl, this.movement.y, direction.z * speedMultiplier * jumpSettings.airControl);
             }
 
@@ -1552,7 +1549,7 @@ namespace Jinwoo.FirstPersonController
                 landPositionY = GetColliderCeilPosition().y;
             }
 
-            //Handle landing
+            //착륙 처리
             if (previousIsGrounded == false && isGrounded == true)
             {
                 if (callbacksEnabled && isMorphingCollider == false)
@@ -1562,14 +1559,14 @@ namespace Jinwoo.FirstPersonController
             if (jumpSettings.jumpsCount == 0)
                 return;
 
-            //Handle begin jump
+            //핸들 시작 점프
             if (previousIsGrounded == true && isGrounded == false)
             {
                 if (callbacksEnabled && isMorphingCollider == false)
                     BeginJump();
             }
 
-            //Ceiling movement constraint
+            //천장 이동 구속
             Ray ray = new Ray(GetColliderCeilPosition(), bodyTransform.up);
             if (Physics.Raycast(ray, 0.05f))
             {
@@ -1582,14 +1579,14 @@ namespace Jinwoo.FirstPersonController
 
             if (isGrounded)
             {
-                //Reset jump variables
+                //점프 값 리셋
                 currentJumpTimer = 0;
                 jumpLocked = false;
                 lastTimeGrounded = Time.time;
                 currentJumpsCount = 0;
             }
 
-            //Handle multiple jumps
+            //다중 점프 핸들
             if (isJumpButtonDown)
             {
                 currentJumpsCount++;
@@ -1626,10 +1623,10 @@ namespace Jinwoo.FirstPersonController
                     if (movement.y < 0)
                         movement.y = 0;
 
-                    //Increase jump timer
+                    //점프 타이머 증가
                     currentJumpTimer += dt;
 
-                    //Add jump speed
+                    //점프 스피드 더하기
                     movement.y += currentJumpSpeed * dt;
 
                     isTryingToJump = true;
