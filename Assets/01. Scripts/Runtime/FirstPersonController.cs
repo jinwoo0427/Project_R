@@ -1277,7 +1277,7 @@ namespace Jinwoo.FirstPersonController
                 //카메라 방향에서 광선을 얻음
                 Ray ray = cameraController.GetCamera().ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-                //캐릭터가 무언가를 치는 범위에 있음
+                //캐릭터가 훅 레이어 오브젝트 범위에 있음
                 if (Physics.Raycast(ray, out var hit, grapplingHookSettings.launchMaxDistance, grapplingHookSettings.hookableObjectLayerMask))
                 {
                     Crosshair.SetCrosshairColor(grapplingHookSettings.crosshairColor);
@@ -1347,7 +1347,7 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //그래플된 캐릭터 이동 처리
+            //그래플된 캐릭터 이동 처리 **
 
             if (isGrappled == false) //아직 그래플링 사용하지 않음
             {
