@@ -19,7 +19,6 @@ public class cutscene : MonoBehaviour
     public GameObject EndPanel;
 
     bool isEnd;
-
     void Update()
     {
         if(isEnd)
@@ -29,6 +28,7 @@ public class cutscene : MonoBehaviour
                 SceneManager.LoadScene("StartScene");
             }
         }
+
     }
     //playerController -> cameraroot -> cameracontrols
 
@@ -45,6 +45,7 @@ public class cutscene : MonoBehaviour
     IEnumerator cor()
     {
         Destroy(GamePlayer);
+        cutSceneCamera.gameObject.SetActive(true);
         Timer.Instance.isEnd = true;
 
         cutSceneCamera.GetUniversalAdditionalCameraData().renderType 

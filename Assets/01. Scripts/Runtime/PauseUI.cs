@@ -36,7 +36,7 @@ namespace Jinwoo.FirstPersonController
 
         [Space(5), Header("FOV")]
 
-        public float fovMaxValue = 100;
+        public float fovMaxValue = 130f;
         public float fovMinValue = 60;
 
         private float mouseSensitivityDefaultValue;
