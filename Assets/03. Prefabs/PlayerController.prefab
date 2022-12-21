@@ -1,5 +1,112 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1241254188
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1241254189}
+  - component: {fileID: 1241254191}
+  - component: {fileID: 1241254190}
+  m_Layer: 5
+  m_Name: CrossHair
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1241254189
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241254188}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4750783521786534658}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 20, y: 20}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1241254191
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241254188}
+  m_CullTransparentMesh: 1
+--- !u!114 &1241254190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241254188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300028, guid: db63fa1c2adceb141974024b30ffa6db, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1622880485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1622880486}
+  m_Layer: 6
+  m_Name: Grapple Gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1622880486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622880485}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8036605546137609411}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &183748348412702398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1106,9 +1213,10 @@ GameObject:
   - component: {fileID: 7898042004430884383}
   - component: {fileID: 4750783522817656756}
   - component: {fileID: 4076219289688954361}
+  - component: {fileID: 1489806846}
   m_Layer: 6
   m_Name: PlayerController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1174,12 +1282,12 @@ MonoBehaviour:
   defaultColliderMorphSpeed: 10
   gravityModifier: 1.5
   horizontalSpeedSettings:
-    defaultSpeed: 4
-    backwardsSpeed: 2
+    defaultSpeed: 7
+    backwardsSpeed: 4
     movementDeceleration: 0.05
     horizontalMaxSpeed: 30
   jumpSettings:
-    adaptiveJump: 1
+    adaptiveJump: 0
     jumpsCount: 1
     jumpForce: 8
     adaptiveJumpDuration: 0
@@ -1192,11 +1300,11 @@ MonoBehaviour:
   runSettings:
     runSpeed: 8
     canRunWhileStrafing: 1
-  enableTacticalSprint: 1
+  enableTacticalSprint: 0
   tacticalSprintSettings:
     speed: 12
     duration: 1.5
-  enableProne: 1
+  enableProne: 0
   proneSettings:
     speed: 1
     colliderHeight: 0.9
@@ -1276,11 +1384,11 @@ MonoBehaviour:
     colliderMorphSpeed: 10
   enableGrapplingHook: 1
   grapplingHookSettings:
-    cooldown: 3
-    speedWhileHooked: 12
-    launchMaxDistance: 20
+    cooldown: 1.5
+    speedWhileHooked: 10
+    launchMaxDistance: 30
     grapplingLaunchSpeed: 10
-    crosshairColor: {r: 1, g: 1, b: 1, a: 1}
+    crosshairColor: {r: 1, g: 0, b: 0, a: 1}
     horizontalControlStrength: 10
     detachSpeedLimitCondition: 30
     detachAngleCondition: 90
@@ -1289,7 +1397,7 @@ MonoBehaviour:
     initialVerticalForce: 0.65
     hookableObjectLayerMask:
       serializedVersion: 2
-      m_Bits: 1
+      m_Bits: 512
     hookPrefab: {fileID: 1440245779128105260, guid: 88e30cec29e668e43abbca43367c2df5,
       type: 3}
     hookOffsetFromTarget: 0.325
@@ -1304,12 +1412,12 @@ MonoBehaviour:
   enableWallRun: 1
   wallRunSettings:
     speedWhileRunning: 12
-    verticalWallJumpForce: 8
+    verticalWallJumpForce: 14
     horizontalWallJumpForce: 10
     walkableObjectLayerMask:
       serializedVersion: 2
       m_Bits: 1
-    autoDetachTimerCondition: 1
+    autoDetachTimerCondition: 2
     autoDetachForce: 1
     cooldown: 1.5
     wallRunGravity: 0.5
@@ -1322,6 +1430,8 @@ MonoBehaviour:
     cameraTiltAngle: 15
     cameraTiltLerpSpeed: 5
     cameraTiltResetLerpSpeed: 10
+  isGrappled: 0
+  freeze: 0
 --- !u!114 &4750783522817656756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1391,6 +1501,27 @@ MonoBehaviour:
   proneInputKey: Prone
   hookInputKey: Hook
   zoomKey: Zoom
+--- !u!114 &1489806846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4749796768983846412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efb5be2020bab941bc9620383071bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 4750783522015734635}
+  gunTip: {fileID: 8036605546137609411}
+  whatIsGrappleable:
+    serializedVersion: 2
+    m_Bits: 512
+  maxGrappleDistance: 25
+  grappleDelayTime: 0.25
+  overshootYAxis: 1
+  grapplingCd: 1
 --- !u!1 &4749891346048657094
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,7 +1581,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 800
-  field of view: 50.54078
+  field of view: 67.67275
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -1600,7 +1731,8 @@ Transform:
   m_LocalPosition: {x: -0.68, y: -0.25, z: -0.19999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1622880486}
   m_Father: {fileID: 4747007973052991848}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3406,6 +3538,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4746945673716142136}
     m_Modifications:
+    - target: {fileID: 6140069516130217381, guid: 74d96a405e7a9d54fb88c82423f95628,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6140069516181020875, guid: 74d96a405e7a9d54fb88c82423f95628,
         type: 3}
       propertyPath: backgroundImage
@@ -3521,11 +3658,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 6140069517846638007, guid: 74d96a405e7a9d54fb88c82423f95628,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74d96a405e7a9d54fb88c82423f95628, type: 3}
 --- !u!224 &4750783520773064956 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6140069517079927324, guid: 74d96a405e7a9d54fb88c82423f95628,
+    type: 3}
+  m_PrefabInstance: {fileID: 1503011232753750752}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &4750783521786534658 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6140069516067473890, guid: 74d96a405e7a9d54fb88c82423f95628,
     type: 3}
   m_PrefabInstance: {fileID: 1503011232753750752}
   m_PrefabAsset: {fileID: 0}
