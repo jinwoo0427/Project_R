@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8912616672842431125}
   - component: {fileID: 1216999585546897924}
   - component: {fileID: 5815462079996696802}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hookable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 8146096900874400938}
   - component: {fileID: 8146096900874400939}
   - component: {fileID: 8146096900874400936}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HookCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
