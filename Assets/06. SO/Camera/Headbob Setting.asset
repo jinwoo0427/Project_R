@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   cycleDistance: 5
-  maxVerticalIntensity: 0.1
-  maxHorizontalIntensity: 0.1
+  maxVerticalIntensity: 0.5
+  maxHorizontalIntensity: 0.5
   intensitySpeedMultiplier: 1.2
   verticalIntensityCurve:
     serializedVersion: 2

@@ -7,18 +7,23 @@ public class CheckPoint : MonoBehaviour
     public Material CheckTrueMat;
     public Material CheckFalseMat;
     public MeshRenderer meshRenderer;
+    public Collider myCol;
     public bool isCheck;
-
-
-    void OnCollisionEnter(Collision collision)
+    private void Start()
     {
-        if (isCheck == false && collision.gameObject.CompareTag("Player"))
+        myCol = GetComponent<BoxCollider>();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isCheck == false && other.CompareTag("Player"))
         {
             Debug.Log("플레이어 부딪침");
             //체크포인트 위치 이 오브젝트의 포지션으로 변경
             RespawnManager.Instance.respawnTrm = this.transform;
             isCheck = true;
             meshRenderer.material = CheckTrueMat;
+            myCol.enabled = false;
         }
     }
 }

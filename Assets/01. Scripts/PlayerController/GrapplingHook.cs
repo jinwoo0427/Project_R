@@ -6,11 +6,10 @@ using Jinwoo.FirstPersonController;
 public class GrapplingHook : MonoBehaviour
 {
     [Header("Reference")]
-    private PlayerController pm;
-    public Transform cam;
+    private FirstPersonController pm;
+    public CameraController cam;
     public Transform gunTip;
     public LayerMask whatIsGrappleable;
-    public LineRenderer lr;
 
     [Header("Grappling")]
     public float maxGrappleDistance;
@@ -25,19 +24,27 @@ public class GrapplingHook : MonoBehaviour
 
     private bool grappling;
 
+    //public Rigidbody rb;
 
     private void Start()
     {
-        pm = GetComponent<PlayerController>();
+        pm = GetComponent<FirstPersonController>();
+
+
+        maxGrappleDistance = pm.grapplingHookSettings.launchMaxDistance;
+        //grappleDelayTime = pm.grapplingHookSettings.detachTimerCondition;
     }
 
 
     private void Update()
     {
-        if (pm._input.IsHookButtonDown()) StartGrapple();
+        //if (pm.characterInput.IsHookButtonDown()) StartGrapple();
+
 
         if (grapplingCdTimer > 0)
+        {
             grapplingCdTimer -= Time.deltaTime;
+        }
     }
 
     //private void LateUpdate()
@@ -48,7 +55,7 @@ public class GrapplingHook : MonoBehaviour
     //    //}
     //}
 
-    private void StartGrapple()
+    public void StartGrapple(Transform target)
     {
         if (grapplingCdTimer > 0) return;
 
@@ -57,22 +64,28 @@ public class GrapplingHook : MonoBehaviour
 
         //pm.freeze = true;
 
-        RaycastHit hit;
-        //그래풀링이 되는 조건
-        if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
-        {
-            grapplePoint = hit.point;
+        pm.OnGrappling();
 
-            StartCoroutine(ExecuteGrapple());
-        }
-        else
-        {
-            grapplePoint = cam.position + cam.forward * maxGrappleDistance;
+        //RaycastHit hit;
+        ////그래풀링이 되는 조건
+        //if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
+        //{
+        //    grapplePoint = hit.point;
 
-            StartCoroutine(StopGrapple(grappleDelayTime));
-        }
+        //    StartCoroutine(ExecuteGrapple());
+        //}
+        //else
+        //{
+        //    grapplePoint = cam.position + cam.forward * maxGrappleDistance;
 
-        lr.enabled = true;
+        //    StartCoroutine(StopGrapple(grappleDelayTime));
+        //}
+
+        grapplePoint = target.position;
+
+        StartCoroutine(ExecuteGrapple());
+
+        //lr.enabled = true;
 
         //lr.SetPosition(1, grapplePoint);
     }
@@ -89,14 +102,19 @@ public class GrapplingHook : MonoBehaviour
 
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
 
-        //pm.JumpToPosition(grapplePoint, highestPointOnArc);
+        JumpToPosition(grapplePoint, highestPointOnArc);
 
-        StartCoroutine(StopGrapple(1f));
+        StartCoroutine(StopGrapple(1.5f));
     }
 
     public IEnumerator StopGrapple(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
+
+        pm.OnEndGrappling();
+
+        pm.isGrappled = false;
+        pm.grapplingDestinationPoint = null;
 
         //pm.freeze = false;
 
@@ -104,7 +122,6 @@ public class GrapplingHook : MonoBehaviour
 
         grapplingCdTimer = grapplingCd;
 
-        lr.enabled = false;
     }
 
     public bool IsGrappling()
@@ -115,5 +132,40 @@ public class GrapplingHook : MonoBehaviour
     public Vector3 GetGrapplePoint()
     {
         return grapplePoint;
+    }
+
+    private Vector3 velocityToSet;
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f);
+        //SetVelocity();
+
+        Invoke(nameof(ResetRestrictions), 1f);
+    }
+
+    private void SetVelocity()
+    {
+        pm.SetVelocity(velocityToSet);
+
+        cam.SetFOV(110f);
+    }
+
+    public void ResetRestrictions()
+    {
+        cam.SetFOV(85f);
+    }
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        //Debug.Log(gravity);
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
+            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
     }
 }
