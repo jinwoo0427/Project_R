@@ -35,8 +35,8 @@ namespace Jinwoo.FirstPersonController
         public event Action OnEndFailedGrapplingLine = delegate { };
         public event Action OnGrapplingLine = delegate { }; //각 프레임 호출
         public event Action OnBeginGrappling = delegate { };
-        public event Action OnEndGrappling = delegate { };
-        public event Action OnGrappling = delegate { }; //각 프레임 호출
+        public Action OnEndGrappling = delegate { };
+        public Action OnGrappling = delegate { }; //각 프레임 호출
 
         public event Action OnBeginWallRun = delegate { };
         public event Action OnWallRun = delegate { }; //각 프레임 호출
@@ -58,6 +58,7 @@ namespace Jinwoo.FirstPersonController
         public CharacterController characterController;
 
         public Transform cameraTransform;
+
 
         //스테이트 값
         private bool isGrounded;
@@ -294,7 +295,7 @@ namespace Jinwoo.FirstPersonController
             [Tooltip("붙잡힌 상태에서 이 속도를 초과하면 캐릭터가 분리됩니다.")]
             public float detachSpeedLimitCondition = 27;
 
-            [Tooltip("이 각도 조건을 확장하려면 'detachTimerCondition'을 사용하삼'")]
+            [Tooltip("이 각도 조건을 확장하려면 'detachTimerCondition'을 사용하삼")]
             [Range(0,90)]
             public float detachAngleCondition = 90;
 
@@ -420,7 +421,7 @@ namespace Jinwoo.FirstPersonController
         private Vector3 grapplingDirection;
         private Vector3 grapplingDirectionStart;
         private float grapplingCurrentDistance;
-        private bool isGrappled;
+        public bool isGrappled;
         private LineRenderer grapplingLine;
         private GameObject grapplingLineHook;
         private float grapplingCurrentTimer;
@@ -428,7 +429,7 @@ namespace Jinwoo.FirstPersonController
         private float grapplingCurrentDetachTimer;
         private Spring grapplingLineSpring;
         private Transform grapplingTarget;
-        private Vector3? grapplingDestinationPoint;
+        public Vector3? grapplingDestinationPoint;
         private Vector3 grapplingDestinationPointTargetLocalPosition;
         private Vector3[] grapplingLineSegmentsPositions;
         private float grapplingLineRendererDamper = 14;
@@ -472,6 +473,10 @@ namespace Jinwoo.FirstPersonController
         private float lastTimeJump;
         private float jumpEventCooldown = 0.5f;
 
+        public bool freeze = false;
+
+        //private bool startFirstScene = true;
+
         #endregion
 
         #region Methods
@@ -480,6 +485,7 @@ namespace Jinwoo.FirstPersonController
         {
             tr = transform;
             bodyTransform = tr;
+
 
             defaultGravityModifier = gravityModifier;
             defaultColliderHeight = characterController.height;
@@ -492,6 +498,10 @@ namespace Jinwoo.FirstPersonController
 
             grapplingLineSpring = new Spring();
             grapplingLineSpring.SetTarget(0);
+
+            //startFirstScene = true;
+
+            freeze = false;
         }
 
 
@@ -592,11 +602,17 @@ namespace Jinwoo.FirstPersonController
 
             velocity = characterController.velocity;
 
-
+            
             if (currentControllerState != ControllerState.Climb)
                 cameraController.RotateCamera(cameraHorizontal, cameraVertical, dt);
-        }
 
+            //Debug.Log(cameraHorizontal + " : " + cameraVertical);
+        }
+        //private IEnumerator FirstSet()
+        //{
+        //    yield return new WaitForSeconds(1.5f);
+        //    startFirstScene = false;
+        //}
         public bool CheckForGround()
         {
 
@@ -633,7 +649,7 @@ namespace Jinwoo.FirstPersonController
                     }
 
                     //Standing ---> Sliding
-                    if (enableSlide && enableRun && isRunning && IsSlidingButtonPressedDown() && isMorphingCollider == false && vertical > 0)
+                    if (enableSlide && IsSlidingButtonPressedDown() && isMorphingCollider == false && vertical > 0)
                     {
                         //충돌체를 슬라이드 높이로 모핑
                         SetColliderHeightAutoLerp(slideSettings.colliderHeight, slideSettings.colliderMorphSpeed);
@@ -1277,7 +1293,7 @@ namespace Jinwoo.FirstPersonController
                 //카메라 방향에서 광선을 얻음
                 Ray ray = cameraController.GetCamera().ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-                //캐릭터가 무언가를 치는 범위에 있음
+                //캐릭터가 훅 레이어 오브젝트 범위에 있음
                 if (Physics.Raycast(ray, out var hit, grapplingHookSettings.launchMaxDistance, grapplingHookSettings.hookableObjectLayerMask))
                 {
                     Crosshair.SetCrosshairColor(grapplingHookSettings.crosshairColor);
@@ -1287,12 +1303,12 @@ namespace Jinwoo.FirstPersonController
                     {
                         GrapplingLineBegin(hit.point);
                         grapplingTarget = hit.collider.transform;
-
+                        
                         //훅에 맞은 대상과의 상대 위치 설정(대상이 움직이는 발판인 경우)
                         grapplingDestinationPointTargetLocalPosition = grapplingTarget.InverseTransformPoint(hit.point);
                     }
                 }
-                else //캐릭터가 무언가를 치는 범위에 있지 않음. 어쨌든 로프는 발사되지만 캐릭터는 움직이지 않음
+                else //캐릭터가 그래플 오브젝트 범위에 있지 않음. 어쨌든 로프는 발사되지만 캐릭터는 움직이지 않음
                 {
                     Crosshair.SetCrosshairToDefaultColor();
 
@@ -1313,7 +1329,7 @@ namespace Jinwoo.FirstPersonController
             //핸들 라인 이동
             if (grapplingDestinationPoint != null)
             {
-                //대상이 있는 경우 라인의 대상 지점을 업데이트함(움직이는 대상의 경우).
+                //대상이 있는 경우 라인의 대상 지점을 업데이트함(움직이는 대상의 경우)
                 if (grapplingTarget != null)
                 {
                     grapplingDestinationPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
@@ -1347,7 +1363,7 @@ namespace Jinwoo.FirstPersonController
                 }
             }
 
-            //그래플된 캐릭터 이동 처리
+            //그래플된 캐릭터 이동 처리 **
 
             if (isGrappled == false) //아직 그래플링 사용하지 않음
             {
@@ -1360,6 +1376,7 @@ namespace Jinwoo.FirstPersonController
             if (grapplingTarget != null)
             {
                 grapplingCurrentPoint = grapplingTarget.TransformPoint(grapplingDestinationPointTargetLocalPosition);
+                //grapplingHook.StartGrapple(grapplingTarget);
             }
 
             grapplingDirection = (grapplingCurrentPoint - GetTransformOrigin()).normalized;
@@ -1369,8 +1386,8 @@ namespace Jinwoo.FirstPersonController
             OnGrappling();
 
             //현재 거리가 임계값 이하이거나 캐릭터의 속도가 제한을 초과하는 경우 캐릭터를 분리함.
-            if (grapplingCurrentDistance <= grapplingHookSettings.detachMinDistanceCondition 
-                || GetCurrentSpeedSqr() > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition 
+            if (grapplingCurrentDistance <= grapplingHookSettings.detachMinDistanceCondition
+                || GetCurrentSpeedSqr() > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition
                 || momentum.sqrMagnitude > grapplingHookSettings.detachSpeedLimitCondition * grapplingHookSettings.detachSpeedLimitCondition)
             {
                 OnEndGrappling();
@@ -1696,6 +1713,7 @@ namespace Jinwoo.FirstPersonController
 
         private void HandleMomentum(float dt)
         {
+
             if (currentControllerState == ControllerState.Grappling)
             {
                 momentum += grapplingDirection * grapplingHookSettings.speedWhileHooked * dt * grapplingCurrentTimer;
@@ -1772,6 +1790,11 @@ namespace Jinwoo.FirstPersonController
         {
             Vector3 finalMovement = Vector3.zero;
 
+            if (freeze)
+            {
+                //finalMovement = Vector3.zero;
+                return;
+            }
             if (currentControllerState == ControllerState.Sliding)
             {
                 //미끄러지는 동안 방출된 운동량을 움직임으로 사용하면 안됨.
@@ -2038,7 +2061,10 @@ namespace Jinwoo.FirstPersonController
         {
             return velocity;
         }
-
+        public void SetVelocity(Vector3 vel)
+        {
+            velocity = vel;
+        }
         public bool IsGrounded()
         {
             return isGrounded;

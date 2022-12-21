@@ -56,7 +56,7 @@ namespace Jinwoo.FirstPersonController
 
 		//현재 회전 각도
 		private float currentAngleX = 0f;
-		private float currentAngleY = 0f;
+		private float currentAngleY = 180f;
 
 		private Vector3 cameraRootInitialLocalPosition = Vector3.zero;
 
