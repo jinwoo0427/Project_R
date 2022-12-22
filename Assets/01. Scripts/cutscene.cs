@@ -44,7 +44,7 @@ public class cutscene : MonoBehaviour
 
     IEnumerator cor()
     {
-        Destroy(GamePlayer);
+        GamePlayer.GetComponent<Camera>().GetUniversalAdditionalCameraData().renderType = CameraRenderType.Overlay;
         cutSceneCamera.gameObject.SetActive(true);
         Timer.Instance.isEnd = true;
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ShowCase : MonoBehaviour
 {
@@ -9,13 +10,18 @@ public class ShowCase : MonoBehaviour
     public int childc;
     public GameObject grandChild;
 
-    // Start is called before the first frame update
     void Start()
     {
         childc = transform.childCount;
+        StartCoroutine(nextScene());
     }
 
-    // Update is called once per frame
+    IEnumerator nextScene()
+    {
+        yield return new WaitForSeconds(2.5f);
+        SceneManager.LoadScene("StartScene");
+    }
+
     void Update()
     {
         //Debug.Log(Mathf.Floor(Time.time));

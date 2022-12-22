@@ -16,7 +16,7 @@ public class StartSceneManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("TestScene");
+        LoadingSceneController.Instance.LoadScene("TestScene");
     }
 
     public void ExitGame()
