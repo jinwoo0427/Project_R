@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7543608136191089944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e8fd88d0295034688a2f7fa7b77870, type: 3}
+  m_Name: '[SCPE] BlackBarsRenderer'
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    injectionPoint: 550
+    alwaysEnable: 0
+    cameraTypes: 3
 --- !u!114 &-7521964917191217880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16,6 +33,23 @@ MonoBehaviour:
   settings:
     injectionPoint: 550
     alwaysEnable: 1
+    cameraTypes: 5
+--- !u!114 &-7445080809590720235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9e145efbf4714542a66f8e60a4ebfc3, type: 3}
+  m_Name: '[SCPE] DangerRenderer'
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    injectionPoint: 550
+    alwaysEnable: 0
     cameraTypes: 5
 --- !u!114 &-3238580293753322244
 MonoBehaviour:
@@ -74,6 +108,8 @@ MonoBehaviour:
   - {fileID: -481984686560316531}
   - {fileID: 748569979603405318}
   - {fileID: 4583805858169741157}
+  - {fileID: -7445080809590720235}
+  - {fileID: -7543608136191089944}
   m_RendererFeatureMap: 28edddc9c29c9c97
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

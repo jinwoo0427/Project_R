@@ -608,11 +608,16 @@ namespace Jinwoo.FirstPersonController
 
             //Debug.Log(cameraHorizontal + " : " + cameraVertical);
         }
-        //private IEnumerator FirstSet()
-        //{
-        //    yield return new WaitForSeconds(1.5f);
-        //    startFirstScene = false;
-        //}
+        private void Start()
+        {
+            //StartCoroutine(FirstSet());
+        }
+        private IEnumerator FirstSet()
+        {
+            freeze = true;
+            yield return new WaitForSeconds(1.5f);
+            freeze = false;
+        }
         public bool CheckForGround()
         {
 
