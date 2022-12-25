@@ -2955,10 +2955,10 @@ MonoBehaviour:
   fovInputField: {fileID: 3836104570695473853}
   volumeSlider: {fileID: 3836104570399736632}
   volumeInputField: {fileID: 3836104570342475828}
-  pauseTimeScaleLerpSpeed: 0.03
+  pauseTimeScaleLerpSpeed: 0.1
   mouseSensitivityMaxValue: 160
   mouseSensitivityMinValue: 10
-  fovMaxValue: 130
+  fovMaxValue: 150
   fovMinValue: 60
 --- !u!1 &3836104570714525474
 GameObject:

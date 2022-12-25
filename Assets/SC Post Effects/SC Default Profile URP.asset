@@ -312,7 +312,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.35
+    m_Value: 0.5
   amount:
     m_OverrideState: 1
     m_Value: 1024
@@ -423,11 +423,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   mode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.28
+    m_Value: 0.486
 --- !u!114 &-1113187618671120544
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -583,10 +583,10 @@ MonoBehaviour:
   active: 0
   mode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   offset:
     m_OverrideState: 1
-    m_Value: 2.2
+    m_Value: 5.44
 --- !u!114 &1653173257980990125
 MonoBehaviour:
   m_ObjectHideFlags: 3
