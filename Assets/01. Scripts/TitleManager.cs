@@ -9,17 +9,30 @@ public class TitleManager : MonoBehaviour
     public Image titmeImage;
     public Material titleChangeMat;
 
+    public AudioSource source;
+    public AudioClip clip;
+
     private void Awake()
     {
+        source = GetComponent<AudioSource>();
+        source.clip = clip;
         titmeImage.gameObject.SetActive(false);
+    }
+    private void Start()
+    {
+        Invoke("SoundStart", 1f);
     }
     void Update()
     {
         pTime -= Time.deltaTime;
-
         if(pTime <= 0)
         {
             SceneManager.LoadScene("StartScene");
         }
+    }
+
+    public void SoundStart()
+    {
+        source.PlayOneShot(clip, 0.5f);
     }
 }

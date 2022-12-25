@@ -25,10 +25,15 @@ public class cutscene : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene("StartScene");
+                NextSceneStart();
             }
         }
 
+    }
+
+    public void NextSceneStart()
+    {
+        SceneManager.LoadScene("StartScene");
     }
     //playerController -> cameraroot -> cameracontrols
 
@@ -39,6 +44,8 @@ public class cutscene : MonoBehaviour
 
     public void CutSceneStart()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         StartCoroutine(cor());
     }
 

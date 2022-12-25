@@ -1510,23 +1510,26 @@ namespace Jinwoo.FirstPersonController
                     {
                         if (horizontal > 0.05f || horizontal < -0.05f)
                         {
-                            
                             if (runSettings.canRunWhileStrafing && vertical > 0)
                             {
+                                cameraController.SetFOVLerped(cameraController.GetDefaultFOV() + 20f, 5f, Time.deltaTime);
                                 speedMultiplier = runSettings.runSpeed;
                             }
                             else
                             {
+                                cameraController.SetFOVLerped(cameraController.GetDefaultFOV(), 5f, Time.deltaTime);
                                 speedMultiplier = horizontalSpeedSettings.defaultSpeed;
                             }
                         }
-                        else //앞으로 입력을 누르고 있음
+                        else //앞으로 누르고 있음
                         {
+                            cameraController.SetFOVLerped(cameraController.GetDefaultFOV() + 20f, 5f, Time.deltaTime);
                             speedMultiplier = runSettings.runSpeed;
                         }
                     }
                     else
                     {
+                        cameraController.SetFOVLerped(cameraController.GetDefaultFOV(), 5f, Time.deltaTime);
                         speedMultiplier = horizontalSpeedSettings.defaultSpeed;
                     }
                 }
