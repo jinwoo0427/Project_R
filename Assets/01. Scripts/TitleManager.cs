@@ -20,7 +20,7 @@ public class TitleManager : MonoBehaviour
     }
     private void Start()
     {
-        Invoke("SoundStart", 1f);
+        Invoke("SoundStart", 2f);
     }
     void Update()
     {

@@ -11,8 +11,10 @@ public class VolumManager : MonoBehaviour
     private static VolumManager instance = null;
 
     public BlackBars blackBars;
+    public DoubleVision vision;
 
     [SerializeField, Range(0f, 1f)] public float _intensity = default;
+    [SerializeField, Range(0f, 1f)] public float visionIntensity = default;
 
     public static VolumManager Instance
     {
@@ -46,6 +48,7 @@ public class VolumManager : MonoBehaviour
     private void Start()
     {
         volume.profile.TryGet<BlackBars>(out blackBars);
+        volume.profile.TryGet<DoubleVision>(out vision);
 
         StartSceneValue();
 
@@ -56,13 +59,13 @@ public class VolumManager : MonoBehaviour
     private void Update()
     {
         blackBars.maxSize.value = _intensity;
+        vision.intensity.value = visionIntensity;
         
     }
     public void StartSceneValue()
     {
         _intensity = 1f;
     }
-
     IEnumerator StartCutScene()
     {
         yield return new WaitForSeconds(0.5f);
@@ -73,6 +76,38 @@ public class VolumManager : MonoBehaviour
                 break;
 
             _intensity -= 0.02f;
+            yield return new WaitForSeconds(0.02f);
+        }
+    }
+
+    public void StartVisionF()
+    {
+        StartCoroutine(StartVision());
+    }
+    public void CutVisionF()
+    {
+        StartCoroutine(CutVision());
+    }
+    IEnumerator StartVision()
+    {
+        while (true)
+        {
+            if (visionIntensity >= 0.3f)
+                break;
+
+            visionIntensity += 0.02f;
+            yield return new WaitForSeconds(0.02f);
+        }
+    }
+
+    IEnumerator CutVision()
+    {
+        while (true)
+        {
+            if (visionIntensity <= 0.1f)
+                break;
+
+            visionIntensity -= 0.02f;
             yield return new WaitForSeconds(0.02f);
         }
     }
